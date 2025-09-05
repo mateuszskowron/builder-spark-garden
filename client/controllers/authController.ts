@@ -17,6 +17,20 @@ export async function logout(): Promise<void> {
   return delay(undefined, 100);
 }
 
+export async function updateProfileName(name: string): Promise<User | null> {
+  const u = getCurrentUser();
+  if (!u) return delay(null, 50);
+  const updated: User = { ...u, name };
+  setCurrentUser(updated);
+  return delay(updated, 120);
+}
+
+export async function changePassword(current: string, next: string): Promise<boolean> {
+  // Mock: accept if provided and next is strong enough
+  if (current.trim().length >= 3 && next.trim().length >= 6) return delay(true, 150);
+  return delay(false, 150);
+}
+
 export function getCurrentUser(): User | null {
   const raw = localStorage.getItem("app:user");
   if (!raw) return null;
