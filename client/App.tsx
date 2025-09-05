@@ -23,6 +23,13 @@ function Protected({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+import { useTranslation } from "react-i18next";
+
+function I18nPlaceholder({ titleKey }: { titleKey: string }) {
+  const { t } = useTranslation();
+  return <PlaceholderPage title={t(titleKey)} />;
+}
+
 function AppRoutes() {
   return (
     <Routes>
