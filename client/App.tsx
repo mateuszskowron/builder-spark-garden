@@ -62,16 +62,66 @@ function AppRoutes() {
         }
       />
 
+      <Route
+        path="/invoices"
+        element={
+          <Protected>
+            <AppLayout>
+              <InvoicesPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/calendar"
+        element={
+          <Protected>
+            <AppLayout>
+              <CalendarPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/messages"
+        element={
+          <Protected>
+            <AppLayout>
+              <MessagesPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/payments"
+        element={
+          <Protected>
+            <AppLayout>
+              <PaymentsPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/account"
+        element={
+          <Protected>
+            <AppLayout>
+              <AccountPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
       {[
-        { path: "/invoices", titleKey: "nav.invoices" },
-        { path: "/calendar", titleKey: "nav.calendar" },
-        { path: "/messages", titleKey: "nav.messages" },
         { path: "/documents", titleKey: "nav.documents" },
-        { path: "/payments", titleKey: "nav.payments" },
         { path: "/complaints", titleKey: "nav.complaints" },
         { path: "/reports", titleKey: "nav.reports" },
         { path: "/settings", titleKey: "nav.settings" },
-        { path: "/account", titleKey: "nav.account" },
       ].map(({ path, titleKey }) => (
         <Route
           key={path}
