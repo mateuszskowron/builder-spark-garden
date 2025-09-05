@@ -6,7 +6,10 @@ const users: User[] = [
   { id: "2", name: "John Doe", email: "john@example.com", role: "admin" },
 ];
 
-export async function login(email: string, password: string): Promise<User | null> {
+export async function login(
+  email: string,
+  password: string,
+): Promise<User | null> {
   // Mock credential check: any non-empty password works for existing user
   const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
   if (user && password.trim().length >= 3) return delay(user, 400);
@@ -25,9 +28,13 @@ export async function updateProfileName(name: string): Promise<User | null> {
   return delay(updated, 120);
 }
 
-export async function changePassword(current: string, next: string): Promise<boolean> {
+export async function changePassword(
+  current: string,
+  next: string,
+): Promise<boolean> {
   // Mock: accept if provided and next is strong enough
-  if (current.trim().length >= 3 && next.trim().length >= 6) return delay(true, 150);
+  if (current.trim().length >= 3 && next.trim().length >= 6)
+    return delay(true, 150);
   return delay(false, 150);
 }
 

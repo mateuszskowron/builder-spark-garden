@@ -1,6 +1,12 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { User } from "@/models/types";
-import { getCurrentUser, login as doLogin, logout as doLogout, setCurrentUser, updateProfileName } from "@/controllers/authController";
+import {
+  getCurrentUser,
+  login as doLogin,
+  logout as doLogout,
+  setCurrentUser,
+  updateProfileName,
+} from "@/controllers/authController";
 
 interface AuthContextProps {
   user: User | null;

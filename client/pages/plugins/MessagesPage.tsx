@@ -19,7 +19,10 @@ export default function MessagesPage() {
     });
   }, []);
 
-  const active = useMemo(() => threads.find((t) => t.id === activeId) || null, [threads, activeId]);
+  const active = useMemo(
+    () => threads.find((t) => t.id === activeId) || null,
+    [threads, activeId],
+  );
 
   const onSend = async () => {
     if (!active || !text.trim()) return;
@@ -36,7 +39,11 @@ export default function MessagesPage() {
           <CardTitle className="text-base">{t("messages.title")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="space-y-1" role="listbox" aria-label={t("messages.title") || undefined}>
+          <ul
+            className="space-y-1"
+            role="listbox"
+            aria-label={t("messages.title") || undefined}
+          >
             {threads.map((th) => (
               <li key={th.id}>
                 <button
@@ -46,9 +53,13 @@ export default function MessagesPage() {
                   aria-selected={activeId === th.id}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium line-clamp-1">{th.subject}</span>
+                    <span className="font-medium line-clamp-1">
+                      {th.subject}
+                    </span>
                     {th.unreadCount ? (
-                      <span className="ml-2 rounded-full bg-primary text-primary-foreground px-2 text-xs">{th.unreadCount}</span>
+                      <span className="ml-2 rounded-full bg-primary text-primary-foreground px-2 text-xs">
+                        {th.unreadCount}
+                      </span>
                     ) : null}
                   </div>
                   <div className="text-xs text-muted-foreground line-clamp-1">
@@ -63,10 +74,16 @@ export default function MessagesPage() {
 
       <Card className="lg:col-span-2 min-h-[420px] flex flex-col">
         <CardHeader>
-          <CardTitle className="text-base">{active?.subject ?? t("messages.title")}</CardTitle>
+          <CardTitle className="text-base">
+            {active?.subject ?? t("messages.title")}
+          </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-3 flex-1">
-          <div className="flex-1 space-y-3 overflow-auto pr-1" role="log" aria-live="polite">
+          <div
+            className="flex-1 space-y-3 overflow-auto pr-1"
+            role="log"
+            aria-live="polite"
+          >
             {active?.messages.map((m) => (
               <div key={m.id} className="rounded-md border p-2">
                 <div className="text-xs text-muted-foreground">
@@ -86,7 +103,9 @@ export default function MessagesPage() {
                 if (e.key === "Enter") onSend();
               }}
             />
-            <Button onClick={onSend} disabled={!text.trim()}>{t("login.submit")}</Button>
+            <Button onClick={onSend} disabled={!text.trim()}>
+              {t("login.submit")}
+            </Button>
           </div>
         </CardContent>
       </Card>

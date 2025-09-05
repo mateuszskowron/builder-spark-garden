@@ -15,8 +15,10 @@ export default function CalendarPage() {
     fetchEvents().then(setEvents);
   }, []);
 
-  const daysWithEvents = useMemo(() =>
-    new Set(events.map((e) => new Date(e.start).toDateString())), [events]);
+  const daysWithEvents = useMemo(
+    () => new Set(events.map((e) => new Date(e.start).toDateString())),
+    [events],
+  );
 
   const modifiers = {
     hasEvent: (day: Date) => daysWithEvents.has(day.toDateString()),
@@ -39,7 +41,9 @@ export default function CalendarPage() {
             month={month}
             onMonthChange={setMonth}
             modifiers={modifiers}
-            modifiersStyles={{ hasEvent: { backgroundColor: "hsl(var(--accent))" } }}
+            modifiersStyles={{
+              hasEvent: { backgroundColor: "hsl(var(--accent))" },
+            }}
             styles={styles}
             captionLayout="dropdown"
             fromYear={2020}
@@ -53,7 +57,10 @@ export default function CalendarPage() {
           <CardTitle className="text-base">{t("calendar.upcoming")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="space-y-3" aria-label={t("calendar.upcoming") || undefined}>
+          <ul
+            className="space-y-3"
+            aria-label={t("calendar.upcoming") || undefined}
+          >
             {events
               .slice()
               .sort((a, b) => +new Date(a.start) - +new Date(b.start))
@@ -61,7 +68,8 @@ export default function CalendarPage() {
                 <li key={e.id} className="rounded-md border p-3">
                   <div className="font-medium">{e.title}</div>
                   <div className="text-sm text-muted-foreground">
-                    {new Date(e.start).toLocaleString()} — {new Date(e.end).toLocaleTimeString()}
+                    {new Date(e.start).toLocaleString()} —{" "}
+                    {new Date(e.end).toLocaleTimeString()}
                   </div>
                 </li>
               ))}

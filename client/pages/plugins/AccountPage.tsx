@@ -5,7 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { changePassword } from "@/controllers/authController";
 import { toast } from "sonner";
 
@@ -13,7 +19,9 @@ export default function AccountPage() {
   const { t, i18n } = useTranslation();
   const { user, updateName } = useAuth();
   const [name, setName] = useState(user?.name ?? "");
-  const [lang, setLang] = useState(i18n.language.startsWith("pl") ? "pl" : "en");
+  const [lang, setLang] = useState(
+    i18n.language.startsWith("pl") ? "pl" : "en",
+  );
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -36,7 +44,11 @@ export default function AccountPage() {
           <form className="space-y-4" onSubmit={onSave}>
             <div className="space-y-2">
               <Label htmlFor="name">{t("account.name")}</Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">{t("account.email")}</Label>
@@ -68,7 +80,8 @@ export default function AccountPage() {
             className="space-y-4"
             onSubmit={async (e) => {
               e.preventDefault();
-              if (next !== confirm) return toast.error("Passwords do not match");
+              if (next !== confirm)
+                return toast.error("Passwords do not match");
               const ok = await changePassword(current, next);
               if (ok) {
                 setCurrent("");
@@ -80,15 +93,30 @@ export default function AccountPage() {
           >
             <div className="space-y-2">
               <Label htmlFor="cur">{t("account.currentPassword")}</Label>
-              <Input id="cur" type="password" value={current} onChange={(e) => setCurrent(e.target.value)} />
+              <Input
+                id="cur"
+                type="password"
+                value={current}
+                onChange={(e) => setCurrent(e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="new">{t("account.newPassword")}</Label>
-              <Input id="new" type="password" value={next} onChange={(e) => setNext(e.target.value)} />
+              <Input
+                id="new"
+                type="password"
+                value={next}
+                onChange={(e) => setNext(e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="conf">{t("account.confirmPassword")}</Label>
-              <Input id="conf" type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+              <Input
+                id="conf"
+                type="password"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+              />
             </div>
             <Button type="submit">{t("account.updatePassword")}</Button>
           </form>

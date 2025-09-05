@@ -37,7 +37,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <SidebarHeader>
           <div className="flex h-10 items-center gap-2 px-2">
             <Link to="/" className="flex items-center gap-2 font-semibold">
-              <div className="size-6 rounded-md bg-primary text-primary-foreground grid place-items-center">PK</div>
+              <div className="size-6 rounded-md bg-primary text-primary-foreground grid place-items-center">
+                PK
+              </div>
               <span className="text-sm">{t("appName")}</span>
             </Link>
           </div>
@@ -79,11 +81,18 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-2">
               <SidebarTrigger aria-label="Toggle menu" />
               <Separator orientation="vertical" className="mx-2 h-6" />
-              <span className="text-sm text-muted-foreground">{t("appName")}</span>
+              <span className="text-sm text-muted-foreground">
+                {t("appName")}
+              </span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="sr-only" id="user-menu-label">User menu</span>
-              <div className="flex items-center gap-2" aria-labelledby="user-menu-label">
+              <span className="sr-only" id="user-menu-label">
+                User menu
+              </span>
+              <div
+                className="flex items-center gap-2"
+                aria-labelledby="user-menu-label"
+              >
                 <Avatar>
                   <AvatarFallback>{user?.name?.[0] ?? "U"}</AvatarFallback>
                 </Avatar>
@@ -91,12 +100,16 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                   <span className="font-medium">{user?.name}</span>
                   <span className="text-muted-foreground">{user?.email}</span>
                 </div>
-                <Button variant="outline" size="sm" onClick={() => logout()}>{t("nav.logout")}</Button>
+                <Button variant="outline" size="sm" onClick={() => logout()}>
+                  {t("nav.logout")}
+                </Button>
               </div>
             </div>
           </div>
         </header>
-        <main className={cn("p-4", location.pathname === "/" ? "" : "")}>{children}</main>
+        <main className={cn("p-4", location.pathname === "/" ? "" : "")}>
+          {children}
+        </main>
       </SidebarInset>
     </SidebarProvider>
   );

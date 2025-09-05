@@ -34,7 +34,12 @@ export async function fetchPayments(): Promise<Payment[]> {
   return delay(payments, 220);
 }
 
-export async function createPayment(input: { amount: number; currency: string; method: Payment["method"]; reference: string; }): Promise<Payment> {
+export async function createPayment(input: {
+  amount: number;
+  currency: string;
+  method: Payment["method"];
+  reference: string;
+}): Promise<Payment> {
   const p: Payment = {
     id: `P-${Math.random().toString(36).slice(2, 8)}`,
     date: new Date().toISOString(),

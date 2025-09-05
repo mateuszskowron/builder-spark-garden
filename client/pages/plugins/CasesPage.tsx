@@ -9,9 +9,18 @@ import { Badge } from "@/components/ui/badge";
 function StatusBadge({ status }: { status: Case["status"] }) {
   const { t } = useTranslation();
   const map: Record<Case["status"], { label: string; className: string }> = {
-    open: { label: t("cases.status.open"), className: "bg-blue-100 text-blue-900" },
-    inProgress: { label: t("cases.status.inProgress"), className: "bg-amber-100 text-amber-900" },
-    closed: { label: t("cases.status.closed"), className: "bg-emerald-100 text-emerald-900" },
+    open: {
+      label: t("cases.status.open"),
+      className: "bg-blue-100 text-blue-900",
+    },
+    inProgress: {
+      label: t("cases.status.inProgress"),
+      className: "bg-amber-100 text-amber-900",
+    },
+    closed: {
+      label: t("cases.status.closed"),
+      className: "bg-emerald-100 text-emerald-900",
+    },
   };
   const s = map[status];
   return <Badge className={s.className}>{s.label}</Badge>;
@@ -27,7 +36,10 @@ export default function CasesPage() {
   }, []);
 
   const filtered = cases.filter((c) =>
-    [c.id, c.title, c.description].join(" ").toLowerCase().includes(query.toLowerCase()),
+    [c.id, c.title, c.description]
+      .join(" ")
+      .toLowerCase()
+      .includes(query.toLowerCase()),
   );
 
   return (
@@ -52,7 +64,9 @@ export default function CasesPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground line-clamp-3">{c.description}</p>
+              <p className="text-sm text-muted-foreground line-clamp-3">
+                {c.description}
+              </p>
               <div className="mt-4 text-xs text-muted-foreground">
                 <span>#{c.id}</span>
                 <span className="mx-2">•</span>

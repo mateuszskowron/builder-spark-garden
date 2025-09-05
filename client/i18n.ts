@@ -103,7 +103,8 @@ const resources = {
         updatePassword: "Update password",
       },
       placeholder: {
-        building: "This section is a placeholder. Ask to generate full content.",
+        building:
+          "This section is a placeholder. Ask to generate full content.",
       },
     },
   },
@@ -206,7 +207,8 @@ const resources = {
         updatePassword: "Zmień hasło",
       },
       placeholder: {
-        building: "Ta sekcja to placeholder. Poproś o wygenerowanie pełnej zawartości.",
+        building:
+          "Ta sekcja to placeholder. Poproś o wygenerowanie pełnej zawartości.",
       },
     },
   },
