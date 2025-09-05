@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 function StatusBadge({ status }: { status: Invoice["status"] }) {
   const { t } = useTranslation();
@@ -22,18 +24,27 @@ export default function InvoicesPage() {
   const { t } = useTranslation();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [q, setQ] = useState("");
+  const [status, setStatus] = useState<Invoice["status"] | "all">("all");
+  const [from, setFrom] = useState<string>("");
+  const [to, setTo] = useState<string>("");
 
   useEffect(() => {
     fetchInvoices().then(setInvoices);
   }, []);
 
-  const filtered = useMemo(
-    () =>
-      invoices.filter((i) =>
-        [i.number, i.status, i.amount, i.currency].join(" ").toString().toLowerCase().includes(q.toLowerCase()),
-      ),
-    [invoices, q],
-  );
+  const filtered = useMemo(() => {
+    return invoices.filter((i) => {
+      const textMatch = [i.number, i.status, i.amount, i.currency]
+        .join(" ")
+        .toString()
+        .toLowerCase()
+        .includes(q.toLowerCase());
+      const statusMatch = status === "all" ? true : i.status === status;
+      const fromMatch = from ? new Date(i.issueDate) >= new Date(from) : true;
+      const toMatch = to ? new Date(i.issueDate) <= new Date(to) : true;
+      return textMatch && statusMatch && fromMatch && toMatch;
+    });
+  }, [invoices, q, status, from, to]);
 
   return (
     <div className="space-y-4">
@@ -41,6 +52,42 @@ export default function InvoicesPage() {
         <h1 className="text-2xl font-semibold">{t("invoices.title")}</h1>
         <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("cases.searchPlaceholder")} aria-label={t("cases.searchPlaceholder")} className="max-w-xs" />
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">{t("invoices.filters")}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 grid-cols-1 md:grid-cols-4 items-end">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t("invoices.status")}</label>
+              <Select value={status} onValueChange={(v) => setStatus(v as any)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="paid">{t("invoices.paid")}</SelectItem>
+                  <SelectItem value="unpaid">{t("invoices.unpaid")}</SelectItem>
+                  <SelectItem value="overdue">{t("invoices.overdue")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="from">{t("invoices.from")}</label>
+              <Input id="from" type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="to">{t("invoices.to")}</label>
+              <Input id="to" type="date" value={to} onChange={(e) => setTo(e.target.value)} />
+            </div>
+            <div>
+              <Button variant="secondary" onClick={() => { setQ(""); setStatus("all"); setFrom(""); setTo(""); }}>{t("invoices.clear")}</Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle className="text-base">{t("invoices.title")}</CardTitle>
