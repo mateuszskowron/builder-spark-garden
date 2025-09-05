@@ -67,7 +67,7 @@ function AppRoutes() {
           element={
             <Protected>
               <AppLayout>
-                <PlaceholderPage title={require("i18next").t(titleKey)} />
+                <I18nPlaceholder titleKey={titleKey} />
               </AppLayout>
             </Protected>
           }
