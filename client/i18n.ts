@@ -129,4 +129,12 @@ i18n
     },
   });
 
+// Keep <html lang> in sync for accessibility
+i18n.on("languageChanged", (lng) => {
+  if (typeof document !== "undefined") {
+    document.documentElement.lang = lng;
+    document.documentElement.dir = "ltr";
+  }
+});
+
 export default i18n;
