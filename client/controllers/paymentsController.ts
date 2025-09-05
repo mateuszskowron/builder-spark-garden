@@ -34,6 +34,20 @@ export async function fetchPayments(): Promise<Payment[]> {
   return delay(payments, 220);
 }
 
+export async function createPayment(input: { amount: number; currency: string; method: Payment["method"]; reference: string; }): Promise<Payment> {
+  const p: Payment = {
+    id: `P-${Math.random().toString(36).slice(2, 8)}`,
+    date: new Date().toISOString(),
+    amount: input.amount,
+    currency: input.currency,
+    method: input.method,
+    status: "completed",
+    reference: input.reference,
+  };
+  payments.unshift(p);
+  return delay(p, 200);
+}
+
 function delay<T>(value: T, ms: number): Promise<T> {
   return new Promise((res) => setTimeout(() => res(value), ms));
 }
