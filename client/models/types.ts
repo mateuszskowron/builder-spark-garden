@@ -44,9 +44,11 @@ export type PluginId =
   | "account"
   | (string & {});
 
+import type { ComponentType } from "react";
+
 export type PluginDefinition = {
   id: PluginId;
   path: string; // route path
   titleKey: string; // i18n key
-  icon?: React.ComponentType<{ className?: string }>;
+  icon?: ComponentType<{ className?: string }>;
 };
