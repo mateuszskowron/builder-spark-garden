@@ -52,6 +52,7 @@ export async function checkBackendHealth(): Promise<boolean> {
 // Authentication API
 export async function authenticateUser(email: string, password: string) {
   try {
+    console.log(`[MercurJS] Authenticating with backend: ${BACKEND_URL}`);
     const result = await sdk.auth.login("user", "emailpass", {
       email,
       password,
@@ -60,17 +61,23 @@ export async function authenticateUser(email: string, password: string) {
     if (typeof result === "string") {
       // Token returned
       setAuthToken(result);
+      console.log("[MercurJS] Authentication successful");
       return { success: true, token: result };
     } else if (result?.location) {
       // Additional auth steps needed
+      console.warn("[MercurJS] Additional authentication required");
       return { success: false, error: "Additional authentication required" };
     }
 
+    console.error("[MercurJS] Authentication failed - unexpected response");
     return { success: false, error: "Authentication failed" };
   } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : "Authentication failed";
+    console.error("[MercurJS] Authentication error:", errorMsg);
+    console.error("[MercurJS] Full error:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Authentication failed",
+      error: errorMsg,
     };
   }
 }
