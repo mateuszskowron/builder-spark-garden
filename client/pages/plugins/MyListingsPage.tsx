@@ -198,6 +198,7 @@ export default function MyListingsPage() {
                           variant="ghost"
                           size="sm"
                           title="View details"
+                          onClick={() => navigate(`/listings/${listing.id}`)}
                         >
                           <Eye className="size-4" />
                         </Button>
