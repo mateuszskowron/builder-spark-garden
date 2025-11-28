@@ -120,6 +120,39 @@ function AppRoutes() {
         }
       />
 
+      <Route
+        path="/companies"
+        element={
+          <Protected>
+            <AppLayout>
+              <CompaniesPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/users"
+        element={
+          <Protected>
+            <AppLayout>
+              <UserManagementPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/registration-requests"
+        element={
+          <Protected>
+            <AppLayout>
+              <RegistrationRequestsPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
       {[
         { path: "/documents", titleKey: "nav.documents" },
         { path: "/complaints", titleKey: "nav.complaints" },
