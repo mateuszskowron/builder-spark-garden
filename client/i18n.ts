@@ -158,6 +158,11 @@ const resources = {
         notesPlaceholder: "Add any additional notes...",
         offerSent: "Offer sent successfully",
         offerError: "Failed to send offer",
+        conversation: "Conversation",
+        messages: "Messages",
+        offers: "Offers",
+        noConversation: "No conversation yet",
+        loadError: "Failed to load conversation",
         create: "Create Listing",
         cancel: "Cancel",
         filters: {
