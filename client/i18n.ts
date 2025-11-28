@@ -168,6 +168,27 @@ const resources = {
         sellingProduct: "Selling",
         buyingProduct: "Buying",
       },
+      contact: {
+        title: "Contact Us",
+        description: "Get in touch with our team",
+        email: "Email",
+        emailDescription: "Send us an email for general inquiries",
+        phone: "Phone",
+        phoneDescription: "Call us during business hours",
+        address: "Address",
+        businessHours: "Business Hours",
+        mondayFriday: "Monday - Friday",
+        saturday: "Saturday",
+        sunday: "Sunday",
+        closed: "Closed",
+        aboutUs: "About Food Exchange",
+        aboutText1:
+          "Food Exchange is a modern platform designed to connect food producers, processors, and retailers in one unified marketplace.",
+        aboutText2:
+          "Our mission is to simplify agricultural trade, reduce food waste, and create opportunities for fair pricing and sustainable practices in the food supply chain.",
+        aboutText3:
+          "With our comprehensive tools for listing management, communication, and transaction tracking, we make it easy to conduct business efficiently and safely.",
+      },
       admin: {
         companies: {
           title: "Companies",
