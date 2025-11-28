@@ -1,0 +1,203 @@
+import Medusa from "@medusajs/js-sdk";
+
+const BACKEND_URL =
+  typeof window !== "undefined"
+    ? localStorage.getItem("mercurjs:backend-url") || "http://localhost:9000"
+    : "http://localhost:9000";
+
+export const sdk = new Medusa({
+  baseUrl: BACKEND_URL,
+  debug: false,
+  auth: {
+    type: "session",
+  },
+});
+
+// Helper to store token
+export function setAuthToken(token: string) {
+  localStorage.setItem("mercurjs:auth-token", token);
+  sdk.setAuthToken?.(token);
+}
+
+// Helper to get token
+export function getAuthToken(): string | null {
+  return localStorage.getItem("mercurjs:auth-token");
+}
+
+// Helper to clear token
+export function clearAuthToken() {
+  localStorage.removeItem("mercurjs:auth-token");
+}
+
+// Helper to set backend URL
+export function setBackendUrl(url: string) {
+  localStorage.setItem("mercurjs:backend-url", url);
+}
+
+// Health check
+export async function checkBackendHealth(): Promise<boolean> {
+  try {
+    const response = await fetch(`${BACKEND_URL}/health`, {
+      method: "GET",
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+// Authentication API
+export async function authenticateUser(email: string, password: string) {
+  try {
+    const result = await sdk.auth.login("user", "emailpass", {
+      email,
+      password,
+    });
+
+    if (typeof result === "string") {
+      // Token returned
+      setAuthToken(result);
+      return { success: true, token: result };
+    } else if (result?.location) {
+      // Additional auth steps needed
+      return { success: false, error: "Additional authentication required" };
+    }
+
+    return { success: false, error: "Authentication failed" };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Authentication failed",
+    };
+  }
+}
+
+export async function getCurrentAdminUser() {
+  try {
+    const { user } = await sdk.admin.user.me();
+    return user;
+  } catch (error) {
+    console.error("Failed to get current user:", error);
+    return null;
+  }
+}
+
+export async function logoutUser() {
+  try {
+    await sdk.auth.logout("user");
+    clearAuthToken();
+    return true;
+  } catch {
+    clearAuthToken();
+    return true;
+  }
+}
+
+// Products/Listings API
+export async function getProducts(filters?: {
+  q?: string;
+  limit?: number;
+  offset?: number;
+  sort?: string;
+}) {
+  try {
+    const response = await sdk.store.product.list({
+      q: filters?.q,
+      limit: filters?.limit || 20,
+      offset: filters?.offset || 0,
+    });
+    return response;
+  } catch (error) {
+    console.error("Failed to get products:", error);
+    return { products: [], count: 0 };
+  }
+}
+
+export async function getProductById(id: string) {
+  try {
+    const { product } = await sdk.store.product.retrieve(id);
+    return product;
+  } catch (error) {
+    console.error("Failed to get product:", error);
+    return null;
+  }
+}
+
+export async function createProduct(data: {
+  title: string;
+  description?: string;
+  handle?: string;
+  subtitle?: string;
+}) {
+  try {
+    const { product } = await sdk.admin.product.create(data);
+    return product;
+  } catch (error) {
+    console.error("Failed to create product:", error);
+    return null;
+  }
+}
+
+// Collections API (for categories)
+export async function getCollections(filters?: { limit?: number; offset?: number }) {
+  try {
+    const response = await sdk.store.collection.list({
+      limit: filters?.limit || 100,
+      offset: filters?.offset || 0,
+    });
+    return response;
+  } catch (error) {
+    console.error("Failed to get collections:", error);
+    return { collections: [], count: 0 };
+  }
+}
+
+// Orders/Transactions API
+export async function getOrders(filters?: { limit?: number; offset?: number }) {
+  try {
+    const response = await sdk.store.order.list({
+      limit: filters?.limit || 20,
+      offset: filters?.offset || 0,
+    });
+    return response;
+  } catch (error) {
+    console.error("Failed to get orders:", error);
+    return { orders: [], count: 0 };
+  }
+}
+
+export async function getOrderById(id: string) {
+  try {
+    const { order } = await sdk.store.order.retrieve(id);
+    return order;
+  } catch (error) {
+    console.error("Failed to get order:", error);
+    return null;
+  }
+}
+
+// Customer API
+export async function getCustomer() {
+  try {
+    const { customer } = await sdk.store.customer.me();
+    return customer;
+  } catch (error) {
+    console.error("Failed to get customer:", error);
+    return null;
+  }
+}
+
+export async function createCustomer(data: {
+  email: string;
+  first_name?: string;
+  last_name?: string;
+  phone?: string;
+}) {
+  try {
+    const { customer } = await sdk.store.customer.create(data);
+    return customer;
+  } catch (error) {
+    console.error("Failed to create customer:", error);
+    return null;
+  }
+}
