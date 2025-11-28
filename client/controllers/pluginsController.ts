@@ -69,6 +69,27 @@ export function getBuiltinPlugins(): PluginDefinition[] {
       titleKey: "nav.account",
       icon: UserIcon,
     },
+    {
+      id: "companies",
+      path: "/companies",
+      titleKey: "nav.companies",
+      icon: Building2,
+      requiredRole: ["admin"],
+    },
+    {
+      id: "users",
+      path: "/users",
+      titleKey: "nav.users",
+      icon: Users,
+      requiredRole: ["admin"],
+    },
+    {
+      id: "registration-requests",
+      path: "/registration-requests",
+      titleKey: "nav.registrationRequests",
+      icon: ClipboardList,
+      requiredRole: ["admin"],
+    },
   ];
 }
 
