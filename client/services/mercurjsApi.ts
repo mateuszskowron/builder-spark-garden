@@ -58,15 +58,20 @@ export async function checkBackendHealth(): Promise<boolean> {
 export async function authenticateUser(email: string, password: string) {
   try {
     console.log(`[MercurJS] Authenticating with backend: ${BACKEND_URL}`);
+    console.log(`[MercurJS] Email: ${email}`);
+
     const result = await sdk.auth.login("user", "emailpass", {
       email,
       password,
     });
 
+    console.log("[MercurJS] Auth login result type:", typeof result);
+    console.log("[MercurJS] Auth login result:", result);
+
     if (typeof result === "string") {
       // Token returned
       setAuthToken(result);
-      console.log("[MercurJS] Authentication successful");
+      console.log("[MercurJS] Authentication successful, token:", result.substring(0, 20) + "...");
       return { success: true, token: result };
     } else if (result?.location) {
       // Additional auth steps needed
@@ -74,15 +79,24 @@ export async function authenticateUser(email: string, password: string) {
       return { success: false, error: "Additional authentication required" };
     }
 
-    console.error("[MercurJS] Authentication failed - unexpected response");
+    console.error("[MercurJS] Authentication failed - unexpected response", result);
     return { success: false, error: "Authentication failed" };
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : "Authentication failed";
     console.error("[MercurJS] Authentication error:", errorMsg);
-    console.error("[MercurJS] Full error:", error);
+    console.error("[MercurJS] Error type:", error instanceof Error ? error.constructor.name : typeof error);
+    console.error("[MercurJS] Full error object:", error);
+    console.error("[MercurJS] Error stack:", error instanceof Error ? error.stack : "no stack");
+
+    // Try to extract HTTP status from error
+    if (error instanceof Error && "response" in error) {
+      console.error("[MercurJS] Response status:", (error as any).response?.status);
+      console.error("[MercurJS] Response body:", (error as any).response?.data);
+    }
+
     return {
       success: false,
-      error: errorMsg,
+      error: errorMsg || "Authentication failed",
     };
   }
 }
