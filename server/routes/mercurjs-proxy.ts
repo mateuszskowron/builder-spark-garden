@@ -61,18 +61,21 @@ export const handleMercurJsProxy: RequestHandler = async (req, res) => {
     console.log(`[Proxy] Response length: ${responseText.length} bytes`);
     console.log(`[Proxy] Response preview:`, responseText.substring(0, 500));
 
-    // Get response body
+    // Parse response body
     const contentType = response.headers.get("content-type");
     let body: any;
 
     if (contentType?.includes("application/json")) {
-      body = await response.json();
+      try {
+        body = JSON.parse(responseText);
+      } catch {
+        body = { raw: responseText };
+      }
     } else if (contentType?.includes("text")) {
-      body = await response.text();
+      body = responseText;
     } else {
-      // For binary content, convert to buffer
-      const arrayBuffer = await response.arrayBuffer();
-      body = Buffer.from(arrayBuffer);
+      // For binary content, assume it's already read as text and encode
+      body = { data: responseText };
     }
 
     // Forward response headers
