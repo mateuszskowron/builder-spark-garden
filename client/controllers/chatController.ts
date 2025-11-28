@@ -8,15 +8,45 @@ const transactionProposalsCache: Map<string, TransactionProposal> = new Map();
 
 // Chats Management
 export async function getAllChats(userId: string): Promise<Chat[]> {
-  const userChats = chats.filter((c) =>
-    c.participantIds.includes(userId),
-  );
-  return delay([...userChats], 200);
+  try {
+    // Fetch user's orders to get chat-related information
+    const response = await getOrders({ limit: 100 });
+    const orders = response.orders || [];
+
+    // Map orders to chats for now
+    const chats = orders
+      .filter(
+        (order: any) =>
+          order.customer_id === userId || order.seller_id === userId,
+      )
+      .map((order: any) => {
+        const chatId = `chat_${order.id}`;
+        const cached = chatsCache.get(chatId);
+
+        return (
+          cached || {
+            id: chatId,
+            participantIds: [order.customer_id, order.seller_id],
+            listingId: order.line_items?.[0]?.product_id || "",
+            messages: [],
+            lastMessageAt: order.updated_at,
+            status: "active" as const,
+            createdAt: order.created_at,
+          }
+        );
+      });
+
+    return chats;
+  } catch (error) {
+    console.error("Failed to get chats:", error);
+    return [];
+  }
 }
 
 export async function getChatById(id: string): Promise<Chat | null> {
-  const chat = chats.find((c) => c.id === id);
-  return delay(chat ? { ...chat } : null, 100);
+  const cached = chatsCache.get(id);
+  if (cached) return cached;
+  return null;
 }
 
 export async function getChatByListingAndUsers(
@@ -24,13 +54,40 @@ export async function getChatByListingAndUsers(
   userId1: string,
   userId2: string,
 ): Promise<Chat | null> {
-  const chat = chats.find(
-    (c) =>
-      c.listingId === listingId &&
-      c.participantIds.includes(userId1) &&
-      c.participantIds.includes(userId2),
-  );
-  return delay(chat ? { ...chat } : null, 100);
+  try {
+    const response = await getOrders({ limit: 100 });
+    const order = (response.orders || []).find(
+      (o: any) =>
+        (o.customer_id === userId1 || o.customer_id === userId2) &&
+        (o.seller_id === userId1 || o.seller_id === userId2),
+    );
+
+    if (!order) {
+      // Create a new chat if no order exists
+      return createNewChat(listingId, userId1, userId2);
+    }
+
+    const chatId = `chat_${order.id}`;
+    const cached = chatsCache.get(chatId);
+
+    if (cached) return cached;
+
+    const chat: Chat = {
+      id: chatId,
+      participantIds: [userId1, userId2],
+      listingId: listingId,
+      messages: [],
+      lastMessageAt: order.updated_at,
+      status: "active",
+      createdAt: order.created_at,
+    };
+
+    chatsCache.set(chatId, chat);
+    return chat;
+  } catch (error) {
+    console.error("Failed to get chat by listing and users:", error);
+    return null;
+  }
 }
 
 export async function createChat(data: {
@@ -39,26 +96,28 @@ export async function createChat(data: {
   userId: string;
   userName: string;
 }): Promise<Chat> {
-  // Check if chat already exists
-  const existing = chats.find(
-    (c) =>
-      c.listingId === data.listingId &&
-      c.participantIds.every((pid) => data.participantIds.includes(pid)),
+  return createNewChat(
+    data.listingId,
+    data.participantIds[0],
+    data.participantIds[1],
   );
+}
 
-  if (existing) {
-    return delay(existing, 100);
-  }
-
+function createNewChat(
+  listingId: string,
+  userId1: string,
+  userId2: string,
+): Chat {
+  const chatId = `chat_${Date.now()}`;
   const chat: Chat = {
-    id: `chat${chats.length + 1}`,
-    participantIds: data.participantIds,
-    listingId: data.listingId,
+    id: chatId,
+    participantIds: [userId1, userId2],
+    listingId: listingId,
     messages: [
       {
-        id: `msg${chats.length}_1`,
-        senderId: data.userId,
-        senderName: data.userName,
+        id: `msg_${Date.now()}`,
+        senderId: userId1,
+        senderName: "User",
         content: "Cześć, czy jesteś zainteresowany tą ofertą?",
         timestamp: new Date().toISOString(),
       },
@@ -68,8 +127,8 @@ export async function createChat(data: {
     createdAt: new Date().toISOString(),
   };
 
-  chats.push(chat);
-  return delay(chat, 200);
+  chatsCache.set(chatId, chat);
+  return chat;
 }
 
 export async function sendMessage(
@@ -79,15 +138,15 @@ export async function sendMessage(
   content: string,
   attachments?: string[],
 ): Promise<ChatMessage | null> {
-  const chat = chats.find((c) => c.id === chatId);
-  if (!chat) return delay(null, 100);
+  const chat = chatsCache.get(chatId);
+  if (!chat) return null;
 
   if (!chat.participantIds.includes(userId)) {
-    return delay(null, 100);
+    return null;
   }
 
   const message: ChatMessage = {
-    id: `msg${chat.messages.length + 1}`,
+    id: `msg_${Date.now()}`,
     senderId: userId,
     senderName: userName,
     content,
@@ -98,38 +157,41 @@ export async function sendMessage(
   chat.messages.push(message);
   chat.lastMessageAt = message.timestamp;
 
-  return delay(message, 200);
+  return message;
 }
 
 export async function searchChatHistory(
   userId: string,
   searchText: string,
 ): Promise<Chat[]> {
-  const userChats = chats.filter((c) =>
-    c.participantIds.includes(userId),
-  );
+  const userChats = await getAllChats(userId);
 
-  const filtered = userChats.filter((chat) =>
-    chat.messages.some((msg) =>
+  const filtered = userChats.filter((chat) => {
+    const cachedChat = chatsCache.get(chat.id);
+    if (!cachedChat) return false;
+
+    return cachedChat.messages.some((msg) =>
       msg.content.toLowerCase().includes(searchText.toLowerCase()),
-    ),
-  );
+    );
+  });
 
-  return delay(filtered, 300);
+  return filtered;
 }
 
 export async function archiveChat(chatId: string): Promise<Chat | null> {
-  const chat = chats.find((c) => c.id === chatId);
-  if (!chat) return delay(null, 100);
+  const chat = chatsCache.get(chatId);
+  if (!chat) return null;
   chat.status = "archived";
-  return delay({ ...chat }, 150);
+  chatsCache.set(chatId, chat);
+  return { ...chat };
 }
 
 export async function closeChat(chatId: string): Promise<Chat | null> {
-  const chat = chats.find((c) => c.id === chatId);
-  if (!chat) return delay(null, 100);
+  const chat = chatsCache.get(chatId);
+  if (!chat) return null;
   chat.status = "completed";
-  return delay({ ...chat }, 150);
+  chatsCache.set(chatId, chat);
+  return { ...chat };
 }
 
 // Transaction Proposals
