@@ -7,6 +7,7 @@ const resources = {
   en: {
     common: {
       appName: "Customer Panel",
+      back: "Back",
       login: {
         title: "Sign in to your account",
         email: "Email",
@@ -138,8 +139,17 @@ const resources = {
         purchase: "Purchase",
         status: "Status",
         createdAt: "Created",
+        updatedAt: "Updated",
         actions: "Actions",
         contact: "Contact Seller",
+        contactSeller: "Contact Seller",
+        seller: "Seller Information",
+        company: "Company",
+        address: "Address",
+        details: "Listing Details",
+        timeline: "Timeline",
+        notFound: "Listing not found",
+        makeOffer: "Make an Offer",
         create: "Create Listing",
         cancel: "Cancel",
         filters: {
