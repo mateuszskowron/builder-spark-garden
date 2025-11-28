@@ -68,28 +68,6 @@ function AppRoutes() {
       />
 
       <Route
-        path="/calendar"
-        element={
-          <Protected>
-            <AppLayout>
-              <CalendarPage />
-            </AppLayout>
-          </Protected>
-        }
-      />
-
-      <Route
-        path="/messages"
-        element={
-          <Protected>
-            <AppLayout>
-              <MessagesPage />
-            </AppLayout>
-          </Protected>
-        }
-      />
-
-      <Route
         path="/payments"
         element={
           <Protected>
