@@ -305,6 +305,8 @@ const resources = {
         sales: "Sprzedaż",
         purchases: "Zakupy",
         myListings: "Moje Ogłoszenia",
+        chat: "Wiadomości",
+        contact: "Kontakt",
         plugins: "Wtyczki",
         logout: "Wyloguj",
         language: "Język",
