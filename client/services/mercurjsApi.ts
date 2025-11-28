@@ -1,11 +1,12 @@
 import Medusa from "@medusajs/js-sdk";
 
+// Use backend proxy on same origin to avoid CORS issues
 const BACKEND_URL =
   typeof window !== "undefined"
     ? localStorage.getItem("mercurjs:backend-url") ||
       import.meta.env.VITE_BACKEND_URL ||
-      "https://medusa.zh.unitymsp.it"
-    : "https://medusa.zh.unitymsp.it";
+      "/api/mercurjs" // Use proxy endpoint
+    : "/api/mercurjs";
 
 export const sdk = new Medusa({
   baseUrl: BACKEND_URL,
