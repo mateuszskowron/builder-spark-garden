@@ -284,6 +284,12 @@ const resources = {
           rejectionReason: "Rejection Reason",
         },
       },
+      validation: {
+        messageRequired: "Message is required",
+        quantityRequired: "Quantity must be a valid number greater than 0",
+        priceRequired: "Price must be a valid number greater than 0",
+        deliveryDateRequired: "Delivery date is required",
+      },
       placeholder: {
         building:
           "This section is a placeholder. Ask to generate full content.",
@@ -557,6 +563,12 @@ const resources = {
           confirm: "Potwierdź",
           rejectionReason: "Powód Odrzucenia",
         },
+      },
+      validation: {
+        messageRequired: "Wiadomość jest wymagana",
+        quantityRequired: "Ilość musi być prawidłową liczbą większą niż 0",
+        priceRequired: "Cena musi być prawidłową liczbą większą niż 0",
+        deliveryDateRequired: "Data dostawy jest wymagana",
       },
       placeholder: {
         building:
