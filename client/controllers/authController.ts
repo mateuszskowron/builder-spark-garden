@@ -1,9 +1,26 @@
-import type { User } from "@/models/types";
+import type { User, RegistrationRequest } from "@/models/types";
+import { createRegistrationRequest } from "./userManagementController";
 
 // Mock users database
 const users: User[] = [
-  { id: "1", name: "Anna Kowalska", email: "anna@example.com", role: "client" },
-  { id: "2", name: "John Doe", email: "john@example.com", role: "admin" },
+  {
+    id: "1",
+    name: "Anna Kowalska",
+    email: "anna@example.com",
+    role: "company_admin",
+    companyId: "c1",
+    companyName: "FreshFarm Co.",
+    userRole: "admin",
+  },
+  {
+    id: "2",
+    name: "John Doe",
+    email: "john@example.com",
+    role: "admin",
+    companyId: "c1",
+    companyName: "FreshFarm Co.",
+    userRole: "manager",
+  },
 ];
 
 export async function login(
