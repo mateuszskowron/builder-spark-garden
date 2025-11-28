@@ -13,12 +13,35 @@ import {
 
 // Product Categories
 export async function getAllProductCategories(): Promise<ProductCategory[]> {
-  return delay([...productCategories], 150);
+  try {
+    const response = await getCollections({ limit: 100 });
+    return (response.collections || []).map((collection: any) => ({
+      id: collection.id,
+      name: collection.title,
+      description: collection.description,
+      createdAt: collection.created_at || new Date().toISOString(),
+    }));
+  } catch (error) {
+    console.error("Failed to get categories:", error);
+    return [];
+  }
 }
 
 export async function getProductCategoryById(id: string): Promise<ProductCategory | null> {
-  const category = productCategories.find((c) => c.id === id);
-  return delay(category ?? null, 100);
+  try {
+    const response = await getCollections();
+    const collection = response.collections?.find((c: any) => c.id === id);
+    if (!collection) return null;
+    return {
+      id: collection.id,
+      name: collection.title,
+      description: collection.description,
+      createdAt: collection.created_at || new Date().toISOString(),
+    };
+  } catch (error) {
+    console.error("Failed to get category:", error);
+    return null;
+  }
 }
 
 export async function createProductCategory(data: {
@@ -26,13 +49,13 @@ export async function createProductCategory(data: {
   description?: string;
   icon?: string;
 }): Promise<ProductCategory> {
-  const category: ProductCategory = {
-    id: `cat${productCategories.length + 1}`,
+  // MercurJS collection creation would go here
+  // For now, return a mock category
+  return {
+    id: `cat_${Date.now()}`,
     ...data,
     createdAt: new Date().toISOString(),
   };
-  productCategories.push(category);
-  return delay(category, 150);
 }
 
 // Listings
