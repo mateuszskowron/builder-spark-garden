@@ -24,5 +24,10 @@ export function createServer() {
   app.options(/^\/api\/mercurjs($|\/)/, handleMercurJsProxyOptions);
   app.all(/^\/api\/mercurjs($|\/)/, handleMercurJsProxy);
 
+  // Log configuration on startup
+  console.log("[Server] MercurJS Proxy configured");
+  console.log("[Server] MERCURJS_BACKEND_URL:", process.env.MERCURJS_BACKEND_URL || "not set (using default)");
+  console.log("[Server] Proxy endpoint: /api/mercurjs");
+
   return app;
 }
