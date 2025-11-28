@@ -14,6 +14,8 @@ import {
   Building2,
   Users,
   ClipboardList,
+  MessageCircle,
+  HelpCircle,
 } from "lucide-react";
 
 export function getBuiltinPlugins(): PluginDefinition[] {
