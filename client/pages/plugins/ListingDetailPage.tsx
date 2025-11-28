@@ -10,6 +10,7 @@ import type { ListingDetail } from "@/models/types";
 import { getListingById } from "@/controllers/listingsController";
 import { ContactSellerDialog } from "./dialogs/ContactSellerDialog";
 import { MakeOfferDialog } from "./dialogs/MakeOfferDialog";
+import { ListingConversationSection } from "./components/ListingConversationSection";
 
 export default function ListingDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -141,6 +142,13 @@ export default function ListingDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
+          {listing && (
+            <ListingConversationSection
+              listingId={listing.id}
+              sellerId={listing.seller?.id || ""}
+              sellerName={listing.seller?.name || ""}
+            />
+          )}
           <Card>
             <CardHeader>
               <div className="flex items-start justify-between gap-4">
