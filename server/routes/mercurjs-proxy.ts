@@ -93,10 +93,18 @@ export const handleMercurJsProxy: RequestHandler = async (req, res) => {
       res.status(response.status).send(body);
     }
   } catch (error) {
-    console.error("[Proxy] Error:", error);
+    console.error("[Proxy] Fatal error:", error);
+    console.error("[Proxy] Error type:", error instanceof Error ? error.constructor.name : typeof error);
+    console.error("[Proxy] Error details:", {
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      backend_url: MERCURJS_BACKEND_URL,
+    });
+
     res.status(500).json({
       message: "Proxy error",
       error: error instanceof Error ? error.message : "Unknown error",
+      backend_url: MERCURJS_BACKEND_URL,
     });
   }
 };
