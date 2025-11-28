@@ -55,6 +55,20 @@ export async function changePassword(
   return delay(false, 150);
 }
 
+export async function register(data: {
+  companyName: string;
+  registrationNumber: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  contactEmail: string;
+  contactName: string;
+  phone?: string;
+}): Promise<RegistrationRequest> {
+  return createRegistrationRequest(data);
+}
+
 export function getCurrentUser(): User | null {
   const raw = localStorage.getItem("app:user");
   if (!raw) return null;
