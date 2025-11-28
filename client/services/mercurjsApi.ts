@@ -89,10 +89,14 @@ export async function authenticateUser(email: string, password: string) {
 
 export async function getCurrentAdminUser() {
   try {
+    console.log("[MercurJS] Fetching current admin user");
     const { user } = await sdk.admin.user.me();
+    console.log("[MercurJS] Current user:", user);
     return user;
   } catch (error) {
-    console.error("Failed to get current user:", error);
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.error("[MercurJS] Failed to get current user:", errorMsg);
+    console.error("[MercurJS] Full error:", error);
     return null;
   }
 }
