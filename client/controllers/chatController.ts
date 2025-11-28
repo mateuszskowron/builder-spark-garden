@@ -214,6 +214,62 @@ export async function rejectTransactionProposal(
   return delay({ ...proposal }, 150);
 }
 
+// Get offers and messages for a specific listing
+export async function getListingConversation(
+  listingId: string,
+  userId: string,
+): Promise<{ messages: ChatMessage[]; proposals: TransactionProposal[] } | null> {
+  const chat = chats.find(
+    (c) => c.listingId === listingId && c.participantIds.includes(userId),
+  );
+  if (!chat) return delay(null, 100);
+
+  const proposals = transactionProposals.filter((p) => p.chatId === chat.id);
+  return delay(
+    {
+      messages: [...chat.messages],
+      proposals: [...proposals],
+    },
+    150,
+  );
+}
+
+// Get all user offers (both sent and received)
+export async function getUserOffers(
+  userId: string,
+): Promise<
+  Array<
+    TransactionProposal & {
+      chatId: string;
+      listingId: string;
+      productName: string;
+      type: "sale" | "purchase";
+    }
+  >
+> {
+  const userChats = chats.filter((c) => c.participantIds.includes(userId));
+  const userProposals = transactionProposals.filter(
+    (p) =>
+      p.proposedBy === userId ||
+      p.proposedTo === userId,
+  );
+
+  const enriched = userProposals.map((proposal) => {
+    const chat = userChats.find((c) => c.id === proposal.chatId);
+    const listing = chats.find((c) => c.id === proposal.chatId)?.listing;
+
+    return {
+      ...proposal,
+      chatId: proposal.chatId,
+      listingId: chat?.listingId || "",
+      productName: listing?.productName || "Unknown Product",
+      type: listing?.type || ("purchase" as const),
+    };
+  });
+
+  return delay(enriched, 300);
+}
+
 function delay<T>(value: T, ms: number): Promise<T> {
   return new Promise((res) => setTimeout(() => res(value), ms));
 }
