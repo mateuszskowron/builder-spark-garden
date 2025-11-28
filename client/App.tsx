@@ -57,17 +57,6 @@ function AppRoutes() {
       />
 
       <Route
-        path="/cases"
-        element={
-          <Protected>
-            <AppLayout>
-              <CasesPage />
-            </AppLayout>
-          </Protected>
-        }
-      />
-
-      <Route
         path="/invoices"
         element={
           <Protected>
