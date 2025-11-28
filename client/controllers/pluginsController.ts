@@ -107,6 +107,18 @@ export function getBuiltinPlugins(): PluginDefinition[] {
       path: "/my-listings",
       titleKey: "nav.myListings",
     },
+    {
+      id: "chat",
+      path: "/chat",
+      titleKey: "nav.chat",
+      icon: MessageCircle,
+    },
+    {
+      id: "contact",
+      path: "/contact",
+      titleKey: "nav.contact",
+      icon: HelpCircle,
+    },
   ];
 }
 
