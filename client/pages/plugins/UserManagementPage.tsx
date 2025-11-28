@@ -323,7 +323,7 @@ export default function UserManagementPage() {
                 <SelectValue placeholder="All companies" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All companies</SelectItem>
+                <SelectItem value="all">All companies</SelectItem>
                 {companies.map((c) => (
                   <SelectItem key={c.id} value={c.id}>
                     {c.name}
