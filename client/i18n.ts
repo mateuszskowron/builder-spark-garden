@@ -34,6 +34,8 @@ const resources = {
         sales: "Sales",
         purchases: "Purchases",
         myListings: "My Listings",
+        chat: "Chat",
+        contact: "Contact",
         plugins: "Plugins",
         logout: "Log out",
         language: "Language",
