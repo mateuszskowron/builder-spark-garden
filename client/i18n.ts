@@ -701,6 +701,14 @@ const resources = {
         quantityRequired: "Ilość musi być prawidłową liczbą większą niż 0",
         priceRequired: "Cena musi być prawidłową liczbą większą niż 0",
         deliveryDateRequired: "Data dostawy jest wymagana",
+        productNameRequired: "Nazwa produktu jest wymagana",
+        categoryRequired: "Kategoria jest wymagana",
+        descriptionRequired: "Opis jest wymagany",
+        unitRequired: "Jednostka jest wymagana",
+        quantityInvalid: "Ilość musi być prawidłową liczbą",
+        locationRequired: "Lokalizacja jest wymagana",
+        cityRequired: "Miasto jest wymagane",
+        countryRequired: "Kraj jest wymagany",
       },
       placeholder: {
         building:
