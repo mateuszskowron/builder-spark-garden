@@ -177,25 +177,6 @@ function AppRoutes() {
         }
       />
 
-      {[
-        { path: "/documents", titleKey: "nav.documents" },
-        { path: "/complaints", titleKey: "nav.complaints" },
-        { path: "/reports", titleKey: "nav.reports" },
-        { path: "/settings", titleKey: "nav.settings" },
-      ].map(({ path, titleKey }) => (
-        <Route
-          key={path}
-          path={path}
-          element={
-            <Protected>
-              <AppLayout>
-                <I18nPlaceholder titleKey={titleKey} />
-              </AppLayout>
-            </Protected>
-          }
-        />
-      ))}
-
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
