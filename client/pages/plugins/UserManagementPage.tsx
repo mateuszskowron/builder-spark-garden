@@ -318,7 +318,7 @@ export default function UserManagementPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>{t("admin.users.listTitle")}</CardTitle>
-            <Select value={selectedCompanyFilter} onValueChange={setSelectedCompanyFilter}>
+            <Select value={selectedCompanyFilter === "" ? "all" : selectedCompanyFilter} onValueChange={(value) => setSelectedCompanyFilter(value === "all" ? "" : value)}>
               <SelectTrigger className="w-48">
                 <SelectValue placeholder="All companies" />
               </SelectTrigger>
