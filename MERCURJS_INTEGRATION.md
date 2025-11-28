@@ -45,16 +45,29 @@ The application controllers have been updated to use MercurJS APIs instead of mo
 
 ## Configuration
 
-### Backend URL
-Set the MercurJS backend URL in `.env.local`:
+### Backend Proxy
+The application uses a Node.js Express proxy (`server/routes/mercurjs-proxy.ts`) to forward requests to the MercurJS backend. This solves CORS issues and keeps API credentials server-side.
+
+### Environment Variables
+Set in `.env.local`:
 
 ```env
-VITE_BACKEND_URL=http://localhost:9000
+# Frontend uses the proxy endpoint
+VITE_BACKEND_URL=/api/mercurjs
+
+# Server uses the actual backend
+MERCURJS_BACKEND_URL=https://medusa.zh.unitymsp.it
 ```
 
-For production, update to your MercurJS production URL:
+For local development with local backend:
 ```env
-VITE_BACKEND_URL=https://your-mercurjs-backend.com
+VITE_BACKEND_URL=/api/mercurjs
+MERCURJS_BACKEND_URL=http://localhost:9000
+```
+
+For production, update the `MERCURJS_BACKEND_URL` to your production backend URL:
+```env
+MERCURJS_BACKEND_URL=https://your-production-backend.com
 ```
 
 ### Authentication Flow
