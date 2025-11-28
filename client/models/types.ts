@@ -4,7 +4,10 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  role: "client" | "admin";
+  role: "client" | "admin" | "company_admin" | "company_user";
+  companyId?: string;
+  companyName?: string;
+  userRole?: UserRole;
 };
 
 export type CaseStatus = "open" | "inProgress" | "closed";
