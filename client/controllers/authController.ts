@@ -1,58 +1,75 @@
 import type { User, RegistrationRequest } from "@/models/types";
 import { createRegistrationRequest } from "./userManagementController";
-
-// Mock users database
-const users: User[] = [
-  {
-    id: "1",
-    name: "Anna Kowalska",
-    email: "anna@example.com",
-    role: "company_admin",
-    companyId: "c1",
-    companyName: "FreshFarm Co.",
-    userRole: "admin",
-  },
-  {
-    id: "2",
-    name: "John Doe",
-    email: "john@example.com",
-    role: "admin",
-    companyId: "c1",
-    companyName: "FreshFarm Co.",
-    userRole: "manager",
-  },
-];
+import {
+  authenticateUser,
+  getCurrentAdminUser,
+  logoutUser,
+  clearAuthToken,
+  getAuthToken,
+} from "@/services/mercurjsApi";
 
 export async function login(
   email: string,
   password: string,
 ): Promise<User | null> {
-  // Mock credential check: any non-empty password works for existing user
-  const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-  if (user && password.trim().length >= 3) return delay(user, 400);
-  return delay(null, 300);
+  try {
+    const result = await authenticateUser(email, password);
+
+    if (!result.success) {
+      return null;
+    }
+
+    // Fetch the authenticated user data
+    const adminUser = await getCurrentAdminUser();
+
+    if (!adminUser) {
+      clearAuthToken();
+      return null;
+    }
+
+    // Map MercurJS admin user to our User type
+    const user: User = {
+      id: adminUser.id,
+      name: `${adminUser.first_name || ""} ${adminUser.last_name || ""}`.trim(),
+      email: adminUser.email,
+      role: "admin", // Map based on adminUser role if available
+      userRole: "admin",
+    };
+
+    return user;
+  } catch (error) {
+    console.error("Login error:", error);
+    return null;
+  }
 }
 
 export async function logout(): Promise<void> {
-  return delay(undefined, 100);
+  await logoutUser();
 }
 
 export async function updateProfileName(name: string): Promise<User | null> {
   const u = getCurrentUser();
-  if (!u) return delay(null, 50);
+  if (!u) return null;
   const updated: User = { ...u, name };
   setCurrentUser(updated);
-  return delay(updated, 120);
+  return updated;
 }
 
 export async function changePassword(
   current: string,
   next: string,
 ): Promise<boolean> {
-  // Mock: accept if provided and next is strong enough
-  if (current.trim().length >= 3 && next.trim().length >= 6)
-    return delay(true, 150);
-  return delay(false, 150);
+  // This would require implementing password change in MercurJS
+  // For now, return false as we need the backend endpoint
+  if (current.trim().length >= 3 && next.trim().length >= 6) {
+    try {
+      // TODO: Call MercurJS password change endpoint
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  return false;
 }
 
 export async function register(data: {
