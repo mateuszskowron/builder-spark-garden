@@ -160,13 +160,17 @@ export async function createProduct(data: {
 // Collections API (for categories)
 export async function getCollections(filters?: { limit?: number; offset?: number }) {
   try {
+    console.log("[MercurJS] Fetching collections with filters:", filters);
     const response = await sdk.store.collection.list({
       limit: filters?.limit || 100,
       offset: filters?.offset || 0,
     });
+    console.log("[MercurJS] Collections response:", response);
     return response;
   } catch (error) {
-    console.error("Failed to get collections:", error);
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.error("[MercurJS] Failed to get collections:", errorMsg);
+    console.error("[MercurJS] Full error:", error);
     return { collections: [], count: 0 };
   }
 }
