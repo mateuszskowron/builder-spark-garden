@@ -1,5 +1,4 @@
 import { RequestHandler } from "express";
-import fetch from "node-fetch";
 
 const MERCURJS_BACKEND_URL =
   process.env.MERCURJS_BACKEND_URL || "https://medusa.zh.unitymsp.it";
