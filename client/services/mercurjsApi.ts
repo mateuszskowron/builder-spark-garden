@@ -116,14 +116,18 @@ export async function getProducts(filters?: {
   sort?: string;
 }) {
   try {
+    console.log("[MercurJS] Fetching products with filters:", filters);
     const response = await sdk.store.product.list({
       q: filters?.q,
       limit: filters?.limit || 20,
       offset: filters?.offset || 0,
     });
+    console.log("[MercurJS] Products response:", response);
     return response;
   } catch (error) {
-    console.error("Failed to get products:", error);
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.error("[MercurJS] Failed to get products:", errorMsg);
+    console.error("[MercurJS] Full error:", error);
     return { products: [], count: 0 };
   }
 }
