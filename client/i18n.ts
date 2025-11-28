@@ -329,6 +329,14 @@ const resources = {
         quantityRequired: "Quantity must be a valid number greater than 0",
         priceRequired: "Price must be a valid number greater than 0",
         deliveryDateRequired: "Delivery date is required",
+        productNameRequired: "Product name is required",
+        categoryRequired: "Category is required",
+        descriptionRequired: "Description is required",
+        unitRequired: "Unit is required",
+        quantityInvalid: "Quantity must be a valid number",
+        locationRequired: "Location is required",
+        cityRequired: "City is required",
+        countryRequired: "Country is required",
       },
       placeholder: {
         building:
@@ -444,7 +452,7 @@ const resources = {
           description: "Przeglądaj dostępne produkty do sprzedaży",
           add: "Dodaj Ogłoszenie Sprzedaży",
           addTitle: "Utwórz Nowe Ogłoszenie Sprzedaży",
-          empty: "Brak dostępnych og��oszeń sprzedaży",
+          empty: "Brak dostępnych ogłoszeń sprzedaży",
         },
         purchases: {
           title: "Ogłoszenia Zakupu",
@@ -611,7 +619,7 @@ const resources = {
           add: "Dodaj Użytkownika",
           edit: "Edytuj Użytkownika",
           listTitle: "Wszyscy Użytkownicy",
-          empty: "Brak użytkownik��w",
+          empty: "Brak użytkowników",
           name: "Pełne Imię i Nazwisko",
           email: "Email",
           company: "Firma",
