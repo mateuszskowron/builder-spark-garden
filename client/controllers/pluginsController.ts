@@ -9,6 +9,7 @@ import {
   ClipboardList,
   MessageCircle,
   HelpCircle,
+  HandshakeIcon,
 } from "lucide-react";
 
 export function getBuiltinPlugins(): PluginDefinition[] {
@@ -73,6 +74,12 @@ export function getBuiltinPlugins(): PluginDefinition[] {
       path: "/chat",
       titleKey: "nav.chat",
       icon: MessageCircle,
+    },
+    {
+      id: "offers",
+      path: "/offers",
+      titleKey: "nav.offers",
+      icon: HandshakeIcon,
     },
     {
       id: "contact",
