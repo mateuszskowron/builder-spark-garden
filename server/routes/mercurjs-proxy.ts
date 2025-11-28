@@ -8,7 +8,11 @@ export const handleMercurJsProxy: RequestHandler = async (req, res) => {
     const path = req.path.replace(/^\/api\/mercurjs/, "");
     const targetUrl = `${MERCURJS_BACKEND_URL}${path}`;
 
-    console.log(`[Proxy] Forwarding ${req.method} ${path} to ${targetUrl}`);
+    console.log(`[Proxy] Backend URL configured: ${MERCURJS_BACKEND_URL}`);
+    console.log(`[Proxy] Request path: ${req.path}`);
+    console.log(`[Proxy] Stripped path: ${path}`);
+    console.log(`[Proxy] Target URL: ${targetUrl}`);
+    console.log(`[Proxy] Forwarding ${req.method} to ${targetUrl}`);
 
     const headers: Record<string, string> = {};
 
