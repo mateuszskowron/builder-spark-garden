@@ -191,6 +191,28 @@ function AppRoutes() {
         }
       />
 
+      <Route
+        path="/chat"
+        element={
+          <Protected>
+            <AppLayout>
+              <ChatPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/contact"
+        element={
+          <Protected>
+            <AppLayout>
+              <ContactPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
       {[
         { path: "/documents", titleKey: "nav.documents" },
         { path: "/complaints", titleKey: "nav.complaints" },
