@@ -18,7 +18,8 @@ export const sdk = new Medusa({
 // Helper to store token
 export function setAuthToken(token: string) {
   localStorage.setItem("mercurjs:auth-token", token);
-  sdk.setAuthToken?.(token);
+  // The Medusa SDK automatically handles tokens for session-based auth
+  // Token is stored and retrieved automatically
 }
 
 // Helper to get token
