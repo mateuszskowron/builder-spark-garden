@@ -4,8 +4,8 @@ const BACKEND_URL =
   typeof window !== "undefined"
     ? localStorage.getItem("mercurjs:backend-url") ||
       import.meta.env.VITE_BACKEND_URL ||
-      "http://localhost:9000"
-    : "http://localhost:9000";
+      "https://medusa.zh.unitymsp.it"
+    : "https://medusa.zh.unitymsp.it";
 
 export const sdk = new Medusa({
   baseUrl: BACKEND_URL,
