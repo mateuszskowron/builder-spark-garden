@@ -405,6 +405,17 @@ const resources = {
           reset: "Wyczyść Filtry",
         },
       },
+      chat: {
+        title: "Wiadomości",
+        description: "Komunikuj się z innymi użytkownikami w sprawie ogłoszeń",
+        conversations: "Rozmowy",
+        search: "Szukaj wiadomości",
+        empty: "Brak aktywnych rozmów",
+        messagePlaceholder: "Napisz wiadomość...",
+        selectConversation: "Wybierz rozmowę aby zacząć pisać",
+        sellingProduct: "Sprzedaż",
+        buyingProduct: "Zakup",
+      },
       admin: {
         companies: {
           title: "Firmy",
