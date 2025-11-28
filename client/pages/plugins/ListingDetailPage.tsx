@@ -8,6 +8,8 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Mail, Phone, MapPin, Calendar } from "lucide-react";
 import type { ListingDetail } from "@/models/types";
 import { getListingById } from "@/controllers/listingsController";
+import { ContactSellerDialog } from "./dialogs/ContactSellerDialog";
+import { MakeOfferDialog } from "./dialogs/MakeOfferDialog";
 
 export default function ListingDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +18,8 @@ export default function ListingDetailPage() {
   const { toast } = useToast();
   const [listing, setListing] = useState<ListingDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [contactDialogOpen, setContactDialogOpen] = useState(false);
+  const [offerDialogOpen, setOfferDialogOpen] = useState(false);
 
   useEffect(() => {
     loadListing();
@@ -266,7 +270,10 @@ export default function ListingDetailPage() {
                   </a>
                 </div>
               </div>
-              <Button className="w-full mt-4">
+              <Button
+                className="w-full mt-4"
+                onClick={() => setContactDialogOpen(true)}
+              >
                 {t("listings.contactSeller")}
               </Button>
             </CardContent>
@@ -277,13 +284,32 @@ export default function ListingDetailPage() {
               <CardTitle>{t("listings.actions")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full">
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => setOfferDialogOpen(true)}
+              >
                 {t("listings.makeOffer")}
               </Button>
             </CardContent>
           </Card>
         </div>
       </div>
+
+      {listing && (
+        <>
+          <ContactSellerDialog
+            open={contactDialogOpen}
+            onOpenChange={setContactDialogOpen}
+            listing={listing}
+          />
+          <MakeOfferDialog
+            open={offerDialogOpen}
+            onOpenChange={setOfferDialogOpen}
+            listing={listing}
+          />
+        </>
+      )}
     </div>
   );
 }
