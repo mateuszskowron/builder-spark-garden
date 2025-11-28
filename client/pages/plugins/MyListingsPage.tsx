@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,14 +21,17 @@ import {
   archiveListing,
   restoreListing,
 } from "@/controllers/listingsController";
-import { Edit2, Archive, RotateCcw, Eye } from "lucide-react";
+import { CreateListingDialog } from "./dialogs/CreateListingDialog";
+import { Edit2, Archive, RotateCcw, Eye, Plus } from "lucide-react";
 
 export default function MyListingsPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
   const [listings, setListings] = useState<Listing[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   useEffect(() => {
     loadListings();
@@ -132,13 +136,19 @@ export default function MyListingsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold">
-          {t("listings.myListings.title")}
-        </h1>
-        <p className="text-muted-foreground">
-          {t("listings.myListings.description")}
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold">
+            {t("listings.myListings.title")}
+          </h1>
+          <p className="text-muted-foreground">
+            {t("listings.myListings.description")}
+          </p>
+        </div>
+        <Button onClick={() => setCreateDialogOpen(true)} className="gap-2">
+          <Plus className="size-4" />
+          {t("listings.create.button") || "Create Listing"}
+        </Button>
       </div>
 
       <Card>
@@ -239,6 +249,12 @@ export default function MyListingsPage() {
           )}
         </CardContent>
       </Card>
+
+      <CreateListingDialog
+        open={createDialogOpen}
+        onOpenChange={setCreateDialogOpen}
+        onListingCreated={loadListings}
+      />
     </div>
   );
 }
