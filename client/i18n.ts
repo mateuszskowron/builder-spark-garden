@@ -300,6 +300,7 @@ const resources = {
     common: {
       appName: "Panel Klienta",
       back: "Wstecz",
+      cancel: "Anuluj",
       login: {
         title: "Zaloguj się do konta",
         email: "Email",
@@ -442,6 +443,14 @@ const resources = {
         timeline: "Historia",
         notFound: "Ogłoszenie nie znalezione",
         makeOffer: "Złóż Ofertę",
+        makeOfferDescription: "Złóż ofertę na ten produkt",
+        contactSellerDescription: "Wyślij wiadomość do sprzedawcy w sprawie tego ogłoszenia",
+        product: "Produkt",
+        deliveryDate: "Data Dostawy",
+        notes: "Uwagi",
+        notesPlaceholder: "Dodaj dodatkowe uwagi...",
+        offerSent: "Oferta wysłana pomyślnie",
+        offerError: "Nie udało się wysłać oferty",
         create: "Utwórz Ogłoszenie",
         cancel: "Anuluj",
         filters: {
@@ -460,10 +469,14 @@ const resources = {
         conversations: "Rozmowy",
         search: "Szukaj wiadomości",
         empty: "Brak aktywnych rozmów",
+        message: "Wiadomość",
         messagePlaceholder: "Napisz wiadomość...",
         selectConversation: "Wybierz rozmowę aby zacząć pisać",
         sellingProduct: "Sprzedaż",
         buyingProduct: "Zakup",
+        send: "Wyślij",
+        messageSent: "Wiadomość wysłana pomyślnie",
+        sendError: "Nie udało się wysłać wiadomości",
       },
       contact: {
         title: "Skontaktuj się z nami",
