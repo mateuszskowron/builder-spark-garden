@@ -46,7 +46,10 @@ export const handleMercurJsProxy: RequestHandler = async (req, res) => {
       fetchOptions.body = JSON.stringify(req.body);
     }
 
-    console.log(`[Proxy] Fetch options:`, JSON.stringify(fetchOptions, null, 2));
+    console.log(
+      `[Proxy] Fetch options:`,
+      JSON.stringify(fetchOptions, null, 2),
+    );
 
     console.log(`[Proxy] Making fetch request to: ${targetUrl}`);
     console.log(`[Proxy] Request headers:`, headers);
@@ -54,7 +57,10 @@ export const handleMercurJsProxy: RequestHandler = async (req, res) => {
     const response = await fetch(targetUrl, fetchOptions);
 
     console.log(`[Proxy] Response status: ${response.status}`);
-    console.log(`[Proxy] Response headers:`, Object.fromEntries(response.headers.entries()));
+    console.log(
+      `[Proxy] Response headers:`,
+      Object.fromEntries(response.headers.entries()),
+    );
 
     // Log response size to detect empty responses
     const responseText = await response.text();
@@ -92,11 +98,11 @@ export const handleMercurJsProxy: RequestHandler = async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(
       "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+      "GET, POST, PUT, DELETE, PATCH, OPTIONS",
     );
     res.setHeader(
       "Access-Control-Allow-Headers",
-      "Content-Type, Authorization"
+      "Content-Type, Authorization",
     );
 
     if (contentType?.includes("application/json")) {
@@ -106,7 +112,10 @@ export const handleMercurJsProxy: RequestHandler = async (req, res) => {
     }
   } catch (error) {
     console.error("[Proxy] Fatal error:", error);
-    console.error("[Proxy] Error type:", error instanceof Error ? error.constructor.name : typeof error);
+    console.error(
+      "[Proxy] Error type:",
+      error instanceof Error ? error.constructor.name : typeof error,
+    );
     console.error("[Proxy] Error details:", {
       message: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
@@ -123,7 +132,10 @@ export const handleMercurJsProxy: RequestHandler = async (req, res) => {
 
 export const handleMercurJsProxyOptions: RequestHandler = (_req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+  );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.status(200).end();
 };

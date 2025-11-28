@@ -27,7 +27,9 @@ export async function getAllProductCategories(): Promise<ProductCategory[]> {
   }
 }
 
-export async function getProductCategoryById(id: string): Promise<ProductCategory | null> {
+export async function getProductCategoryById(
+  id: string,
+): Promise<ProductCategory | null> {
   try {
     const response = await getCollections();
     const collection = response.collections?.find((c: any) => c.id === id);
@@ -154,7 +156,9 @@ export async function getAllListings(filters?: {
   }
 }
 
-export async function getListingById(id: string): Promise<ListingDetail | null> {
+export async function getListingById(
+  id: string,
+): Promise<ListingDetail | null> {
   try {
     const product = await getProductById(id);
     if (!product) return null;
@@ -333,8 +337,7 @@ export async function getPendingListings(): Promise<Listing[]> {
     const results = (response.products || [])
       .filter(
         (p: any) =>
-          p.metadata?.status === "pending_approval" ||
-          !p.metadata?.status,
+          p.metadata?.status === "pending_approval" || !p.metadata?.status,
       )
       .map((product: any) => ({
         id: product.id,

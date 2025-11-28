@@ -43,7 +43,8 @@ export const testProxyConnection: RequestHandler = async (req, res) => {
       status: "error",
       backend_url: MERCURJS_BACKEND_URL,
       error: error instanceof Error ? error.message : "Unknown error",
-      error_type: error instanceof Error ? error.constructor.name : typeof error,
+      error_type:
+        error instanceof Error ? error.constructor.name : typeof error,
     });
   }
 };

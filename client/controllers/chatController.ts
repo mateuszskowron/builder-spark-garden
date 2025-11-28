@@ -247,7 +247,10 @@ export async function rejectTransactionProposal(
 export async function getListingConversation(
   listingId: string,
   userId: string,
-): Promise<{ messages: ChatMessage[]; proposals: TransactionProposal[] } | null> {
+): Promise<{
+  messages: ChatMessage[];
+  proposals: TransactionProposal[];
+} | null> {
   const userChats = Array.from(chatsCache.values());
   const chat = userChats.find(
     (c) => c.listingId === listingId && c.participantIds.includes(userId),
@@ -264,9 +267,7 @@ export async function getListingConversation(
 }
 
 // Get all user offers (both sent and received)
-export async function getUserOffers(
-  userId: string,
-): Promise<
+export async function getUserOffers(userId: string): Promise<
   Array<
     TransactionProposal & {
       chatId: string;
@@ -291,7 +292,7 @@ export async function getUserOffers(
       chatId: proposal.chatId,
       listingId: chat?.listingId || "",
       productName: "Unknown Product",
-      type: ("purchase" as const),
+      type: "purchase" as const,
     };
   });
 

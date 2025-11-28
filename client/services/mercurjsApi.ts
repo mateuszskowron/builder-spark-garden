@@ -9,7 +9,8 @@ export const sdk = new Medusa({
   auth: {
     type: "session",
   },
-  publishableKey: "pk_d6a9391a6f4e32c2eb09d0031ccd8bfd5f28e14fb7c0b4db1d861ba6defd15bd"
+  publishableKey:
+    "pk_d6a9391a6f4e32c2eb09d0031ccd8bfd5f28e14fb7c0b4db1d861ba6defd15bd",
 });
 
 // Helper to store token
@@ -71,7 +72,10 @@ export async function authenticateUser(email: string, password: string) {
     if (typeof result === "string") {
       // Token returned
       setAuthToken(result);
-      console.log("[MercurJS] Authentication successful, token:", result.substring(0, 20) + "...");
+      console.log(
+        "[MercurJS] Authentication successful, token:",
+        result.substring(0, 20) + "...",
+      );
       return { success: true, token: result };
     } else if (result?.location) {
       // Additional auth steps needed
@@ -79,18 +83,31 @@ export async function authenticateUser(email: string, password: string) {
       return { success: false, error: "Additional authentication required" };
     }
 
-    console.error("[MercurJS] Authentication failed - unexpected response", result);
+    console.error(
+      "[MercurJS] Authentication failed - unexpected response",
+      result,
+    );
     return { success: false, error: "Authentication failed" };
   } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : "Authentication failed";
+    const errorMsg =
+      error instanceof Error ? error.message : "Authentication failed";
     console.error("[MercurJS] Authentication error:", errorMsg);
-    console.error("[MercurJS] Error type:", error instanceof Error ? error.constructor.name : typeof error);
+    console.error(
+      "[MercurJS] Error type:",
+      error instanceof Error ? error.constructor.name : typeof error,
+    );
     console.error("[MercurJS] Full error object:", error);
-    console.error("[MercurJS] Error stack:", error instanceof Error ? error.stack : "no stack");
+    console.error(
+      "[MercurJS] Error stack:",
+      error instanceof Error ? error.stack : "no stack",
+    );
 
     // Try to extract HTTP status from error
     if (error instanceof Error && "response" in error) {
-      console.error("[MercurJS] Response status:", (error as any).response?.status);
+      console.error(
+        "[MercurJS] Response status:",
+        (error as any).response?.status,
+      );
       console.error("[MercurJS] Response body:", (error as any).response?.data);
     }
 
@@ -179,7 +196,10 @@ export async function createProduct(data: {
 }
 
 // Collections API (for categories)
-export async function getCollections(filters?: { limit?: number; offset?: number }) {
+export async function getCollections(filters?: {
+  limit?: number;
+  offset?: number;
+}) {
   try {
     console.log("[MercurJS] Fetching collections with filters:", filters);
     const response = await sdk.store.collection.list({

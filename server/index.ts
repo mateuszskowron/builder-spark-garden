@@ -2,7 +2,10 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
-import { handleMercurJsProxy, handleMercurJsProxyOptions } from "./routes/mercurjs-proxy";
+import {
+  handleMercurJsProxy,
+  handleMercurJsProxyOptions,
+} from "./routes/mercurjs-proxy";
 import { testProxyConnection } from "./routes/test-proxy";
 
 export function createServer() {
@@ -30,7 +33,10 @@ export function createServer() {
 
   // Log configuration on startup
   console.log("[Server] MercurJS Proxy configured");
-  console.log("[Server] MERCURJS_BACKEND_URL:", process.env.MERCURJS_BACKEND_URL || "not set (using default)");
+  console.log(
+    "[Server] MERCURJS_BACKEND_URL:",
+    process.env.MERCURJS_BACKEND_URL || "not set (using default)",
+  );
   console.log("[Server] Proxy endpoint: /api/mercurjs");
 
   return app;

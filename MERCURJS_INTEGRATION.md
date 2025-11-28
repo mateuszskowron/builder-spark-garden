@@ -9,9 +9,11 @@ The application has been integrated with MercurJS, an open-source marketplace pl
 ## Architecture
 
 ### API Service Layer
+
 **File**: `client/services/mercurjsApi.ts`
 
 This layer provides:
+
 - Medusa SDK initialization
 - Authentication helpers (token management)
 - API functions for:
@@ -22,6 +24,7 @@ This layer provides:
   - Customers
 
 ### Controllers
+
 The application controllers have been updated to use MercurJS APIs instead of mock data:
 
 1. **authController.ts** - Authentication
@@ -46,9 +49,11 @@ The application controllers have been updated to use MercurJS APIs instead of mo
 ## Configuration
 
 ### Backend Proxy
+
 The application uses a Node.js Express proxy (`server/routes/mercurjs-proxy.ts`) to forward requests to the MercurJS backend. This solves CORS issues and keeps API credentials server-side.
 
 ### Environment Variables
+
 Set in `.env.local`:
 
 ```env
@@ -60,12 +65,14 @@ MERCURJS_BACKEND_URL=https://medusa.zh.unitymsp.it
 ```
 
 For local development with local backend:
+
 ```env
 VITE_BACKEND_URL=/api/mercurjs
 MERCURJS_BACKEND_URL=http://localhost:9000
 ```
 
 For production, update the `MERCURJS_BACKEND_URL` to your production backend URL:
+
 ```env
 MERCURJS_BACKEND_URL=https://your-production-backend.com
 ```
@@ -82,6 +89,7 @@ MERCURJS_BACKEND_URL=https://your-production-backend.com
 ## API Mapping
 
 ### Products (Listings)
+
 MercurJS Products map to application Listings:
 
 ```javascript
@@ -101,21 +109,27 @@ Listing {
 ```
 
 ### Orders (Transactions)
+
 MercurJS Orders map to chat conversations and transaction proposals.
 
 ### Collections (Categories)
+
 MercurJS Collections map to ProductCategories.
 
 ## Implementation Notes
 
 ### Chat System
+
 The chat system currently uses an in-memory cache with MercurJS orders integration. For a production system, consider:
+
 - Integrating with a dedicated messaging service (e.g., Firebase, Twilio)
 - Implementing WebSocket support for real-time messages
 - Storing messages in a separate database
 
 ### Metadata Fields
+
 MercurJS products use the `metadata` field to store application-specific data:
+
 - `type`: 'sale' or 'purchase'
 - `unit`: measurement unit (kg, ton, etc.)
 - `quantity`: amount available
@@ -127,6 +141,7 @@ MercurJS products use the `metadata` field to store application-specific data:
 ## Testing
 
 ### Manual Testing Checklist
+
 1. Verify backend connectivity at `http://localhost:9000/health`
 2. Test login with valid MercurJS user credentials
 3. Test product listing retrieval
@@ -135,6 +150,7 @@ MercurJS products use the `metadata` field to store application-specific data:
 6. Test offer creation and management
 
 ### Environment Setup
+
 ```bash
 # Install dependencies
 npm install
@@ -151,6 +167,7 @@ npm run dev
 ## Next Steps
 
 ### High Priority
+
 1. ✅ Authentication integration
 2. ✅ Product/Listings integration
 3. ✅ Collections/Categories integration
@@ -159,6 +176,7 @@ npm run dev
 6. ⏳ Password change endpoint
 
 ### Medium Priority
+
 1. Vendor-specific product listing
 2. Order status tracking
 3. Payment integration
@@ -166,6 +184,7 @@ npm run dev
 5. Notification system
 
 ### Low Priority
+
 1. Advanced search filters
 2. Bulk product operations
 3. Analytics and reporting
@@ -174,22 +193,28 @@ npm run dev
 ## Troubleshooting
 
 ### Authentication Issues
+
 **Problem**: Login fails with "Authentication failed"
 **Solution**:
+
 - Verify MercurJS backend is running at VITE_BACKEND_URL
 - Check credentials against MercurJS user database
 - Verify `@medusajs/js-sdk` is properly installed
 
 ### API Errors
+
 **Problem**: 404 errors for products/listings
 **Solution**:
+
 - Ensure products exist in MercurJS database
 - Check product metadata is properly formatted
 - Verify vendor_id is correctly set
 
 ### CORS Issues
+
 **Problem**: Cross-origin requests blocked
 **Solution**:
+
 - Configure CORS in MercurJS backend
 - Ensure VITE_BACKEND_URL matches actual backend URL
 - Check browser console for specific error messages
@@ -203,10 +228,10 @@ npm run dev
 
 ## Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| VITE_BACKEND_URL | http://localhost:9000 | MercurJS backend URL |
-| VITE_ENV | development | Environment (development/production) |
+| Variable         | Default               | Description                          |
+| ---------------- | --------------------- | ------------------------------------ |
+| VITE_BACKEND_URL | http://localhost:9000 | MercurJS backend URL                 |
+| VITE_ENV         | development           | Environment (development/production) |
 
 ## Notes
 
