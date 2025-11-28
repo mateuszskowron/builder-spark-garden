@@ -22,6 +22,8 @@ import RegistrationRequestsPage from "./pages/plugins/RegistrationRequestsPage";
 import SalesListingsPage from "./pages/plugins/SalesListingsPage";
 import PurchaseListingsPage from "./pages/plugins/PurchaseListingsPage";
 import MyListingsPage from "./pages/plugins/MyListingsPage";
+import ChatPage from "./pages/plugins/ChatPage";
+import ContactPage from "./pages/plugins/ContactPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { AuthProvider, useAuth } from "@/state/AuthContext";
