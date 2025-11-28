@@ -1,15 +1,8 @@
 import { type PluginDefinition } from "@/models/types";
 import {
   House,
-  FolderGit2,
   FileText,
-  CalendarDays,
-  MessagesSquare,
-  FileStack,
   CreditCard,
-  CircleAlert,
-  BarChart3,
-  Cog,
   User as UserIcon,
   Building2,
   Users,
