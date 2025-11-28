@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { handleMercurJsProxy, handleMercurJsProxyOptions } from "./routes/mercurjs-proxy";
+import { testProxyConnection } from "./routes/test-proxy";
 
 export function createServer() {
   const app = express();
