@@ -156,6 +156,39 @@ function AppRoutes() {
         }
       />
 
+      <Route
+        path="/sales"
+        element={
+          <Protected>
+            <AppLayout>
+              <SalesListingsPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/purchases"
+        element={
+          <Protected>
+            <AppLayout>
+              <PurchaseListingsPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/my-listings"
+        element={
+          <Protected>
+            <AppLayout>
+              <MyListingsPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
       {[
         { path: "/documents", titleKey: "nav.documents" },
         { path: "/complaints", titleKey: "nav.complaints" },
