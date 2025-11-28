@@ -1,47 +1,10 @@
 import type { Chat, ChatMessage, TransactionProposal } from "@/models/types";
+import { getOrderById, getOrders } from "@/services/mercurjsApi";
 
-// Mock chats database
-const chats: Chat[] = [
-  {
-    id: "chat1",
-    participantIds: ["1", "2"],
-    listingId: "list1",
-    messages: [
-      {
-        id: "msg1",
-        senderId: "2",
-        senderName: "John Doe",
-        content: "Czy pomidory są dostępne w większych ilościach?",
-        timestamp: "2024-12-08T11:00:00Z",
-      },
-      {
-        id: "msg2",
-        senderId: "1",
-        senderName: "Anna Kowalska",
-        content:
-          "Tak, mamy dostępnych 500 kg. Mogę przygotować ofertę specjalną.",
-        timestamp: "2024-12-08T11:30:00Z",
-      },
-    ],
-    lastMessageAt: "2024-12-08T11:30:00Z",
-    status: "active",
-    createdAt: "2024-12-08T11:00:00Z",
-  },
-];
-
-// Mock transaction proposals
-const transactionProposals: TransactionProposal[] = [
-  {
-    id: "prop1",
-    chatId: "chat1",
-    proposedBy: "1",
-    proposedTo: "2",
-    acceptedQuantity: 200,
-    proposedPrice: 500.0,
-    proposedAt: "2024-12-08T12:00:00Z",
-    status: "pending",
-  },
-];
+// In-memory cache for chats since MercurJS might not have a dedicated messaging API
+// This could be replaced with a real messaging service integration
+const chatsCache: Map<string, Chat> = new Map();
+const transactionProposalsCache: Map<string, TransactionProposal> = new Map();
 
 // Chats Management
 export async function getAllChats(userId: string): Promise<Chat[]> {
