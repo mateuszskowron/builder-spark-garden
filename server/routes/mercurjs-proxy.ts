@@ -53,12 +53,15 @@ export const handleMercurJsProxy: RequestHandler = async (req, res) => {
     } else if (contentType?.includes("text")) {
       body = await response.text();
     } else {
-      body = await response.buffer();
+      // For binary content, convert to buffer
+      const arrayBuffer = await response.arrayBuffer();
+      body = Buffer.from(arrayBuffer);
     }
 
     // Forward response headers
-    if (response.headers.get("set-cookie")) {
-      res.setHeader("set-cookie", response.headers.get("set-cookie"));
+    const setCookie = response.headers.get("set-cookie");
+    if (setCookie) {
+      res.setHeader("set-cookie", setCookie);
     }
 
     if (contentType) {
@@ -67,10 +70,20 @@ export const handleMercurJsProxy: RequestHandler = async (req, res) => {
 
     // Allow CORS from frontend
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
 
-    res.status(response.status).json(body);
+    if (contentType?.includes("application/json")) {
+      res.status(response.status).json(body);
+    } else {
+      res.status(response.status).send(body);
+    }
   } catch (error) {
     console.error("[Proxy] Error:", error);
     res.status(500).json({
