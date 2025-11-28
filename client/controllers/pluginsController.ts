@@ -11,6 +11,9 @@ import {
   BarChart3,
   Cog,
   User as UserIcon,
+  Building2,
+  Users,
+  ClipboardList,
 } from "lucide-react";
 
 export function getBuiltinPlugins(): PluginDefinition[] {
