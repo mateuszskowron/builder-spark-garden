@@ -4,109 +4,12 @@ import type {
   ListingStatus,
   ProductCategory,
 } from "@/models/types";
-
-// Mock product categories
-const productCategories: ProductCategory[] = [
-  {
-    id: "cat1",
-    name: "Warzywa",
-    description: "Świeże warzywa",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "cat2",
-    name: "Owoce",
-    description: "Świeże owoce",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "cat3",
-    name: "Zboża",
-    description: "Produkty zbożowe",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "cat4",
-    name: "Produkty mleczne",
-    description: "Mleko i przetwory",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "cat5",
-    name: "Mięso i drób",
-    description: "Mięso i produkty mięsne",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "cat6",
-    name: "Ryby i owoce morza",
-    description: "Ryby i produkty morskie",
-    createdAt: new Date().toISOString(),
-  },
-];
-
-// Mock listings database
-const listings: Listing[] = [
-  {
-    id: "list1",
-    companyId: "c1",
-    companyName: "FreshFarm Co.",
-    type: "sale",
-    productName: "Pomidory ekologiczne",
-    productCategory: "cat1",
-    description: "Wysokiej jakości pomidory ekologiczne, certyfikowane",
-    price: 2.5,
-    currency: "PLN",
-    unit: "kg",
-    quantity: 500,
-    location: "ul. Zbożowa 10",
-    city: "Warszawa",
-    country: "Polska",
-    status: "approved",
-    createdAt: "2024-12-08T10:00:00Z",
-    updatedAt: "2024-12-08T10:00:00Z",
-    createdBy: "1",
-  },
-  {
-    id: "list2",
-    companyId: "c2",
-    companyName: "GreenGrocer Ltd.",
-    type: "purchase",
-    productName: "Jabłka świeże",
-    productCategory: "cat2",
-    description: "Szukamy dostawcy świeżych jabłek",
-    price: 1.8,
-    currency: "PLN",
-    unit: "kg",
-    quantity: 1000,
-    location: "ul. Handlowa 5",
-    city: "Kraków",
-    country: "Polska",
-    status: "approved",
-    createdAt: "2024-12-07T14:00:00Z",
-    updatedAt: "2024-12-07T14:00:00Z",
-    createdBy: "2",
-  },
-  {
-    id: "list3",
-    companyId: "c1",
-    companyName: "FreshFarm Co.",
-    type: "sale",
-    productName: "Kurczaki żywopłotowe",
-    productCategory: "cat5",
-    description: "Drób wysokiej jakości, bezpośrednio z fermy",
-    price: 15.0,
-    currency: "PLN",
-    unit: "kg",
-    location: "ul. Zbożowa 10",
-    city: "Warszawa",
-    country: "Polska",
-    status: "pending_approval",
-    createdAt: "2024-12-10T08:00:00Z",
-    updatedAt: "2024-12-10T08:00:00Z",
-    createdBy: "1",
-  },
-];
+import {
+  getCollections,
+  getProducts,
+  getProductById,
+  createProduct,
+} from "@/services/mercurjsApi";
 
 // Product Categories
 export async function getAllProductCategories(): Promise<ProductCategory[]> {
