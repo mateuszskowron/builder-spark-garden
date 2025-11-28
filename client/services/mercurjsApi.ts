@@ -170,13 +170,17 @@ export async function getCollections(filters?: { limit?: number; offset?: number
 // Orders/Transactions API
 export async function getOrders(filters?: { limit?: number; offset?: number }) {
   try {
+    console.log("[MercurJS] Fetching orders with filters:", filters);
     const response = await sdk.store.order.list({
       limit: filters?.limit || 20,
       offset: filters?.offset || 0,
     });
+    console.log("[MercurJS] Orders response:", response);
     return response;
   } catch (error) {
-    console.error("Failed to get orders:", error);
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.error("[MercurJS] Failed to get orders:", errorMsg);
+    console.error("[MercurJS] Full error details:", error);
     return { orders: [], count: 0 };
   }
 }
