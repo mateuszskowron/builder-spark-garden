@@ -134,10 +134,13 @@ export async function getProducts(filters?: {
 
 export async function getProductById(id: string) {
   try {
+    console.log("[MercurJS] Fetching product by ID:", id);
     const { product } = await sdk.store.product.retrieve(id);
+    console.log("[MercurJS] Product retrieved:", product);
     return product;
   } catch (error) {
-    console.error("Failed to get product:", error);
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.error("[MercurJS] Failed to get product:", errorMsg);
     return null;
   }
 }
