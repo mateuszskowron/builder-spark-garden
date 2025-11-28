@@ -203,40 +203,44 @@ export async function createTransactionProposal(data: {
   proposedPrice: number;
 }): Promise<TransactionProposal> {
   const proposal: TransactionProposal = {
-    id: `prop${transactionProposals.length + 1}`,
+    id: `prop_${Date.now()}`,
     ...data,
     proposedAt: new Date().toISOString(),
     status: "pending",
   };
-  transactionProposals.push(proposal);
-  return delay(proposal, 200);
+  transactionProposalsCache.set(proposal.id, proposal);
+  return proposal;
 }
 
 export async function getTransactionProposals(
   chatId: string,
 ): Promise<TransactionProposal[]> {
-  const proposals = transactionProposals.filter((p) => p.chatId === chatId);
-  return delay([...proposals], 150);
+  const proposals = Array.from(transactionProposalsCache.values()).filter(
+    (p) => p.chatId === chatId,
+  );
+  return proposals;
 }
 
 export async function acceptTransactionProposal(
   proposalId: string,
 ): Promise<TransactionProposal | null> {
-  const proposal = transactionProposals.find((p) => p.id === proposalId);
-  if (!proposal) return delay(null, 100);
+  const proposal = transactionProposalsCache.get(proposalId);
+  if (!proposal) return null;
   proposal.status = "accepted";
   proposal.acceptedAt = new Date().toISOString();
-  return delay({ ...proposal }, 150);
+  transactionProposalsCache.set(proposalId, proposal);
+  return { ...proposal };
 }
 
 export async function rejectTransactionProposal(
   proposalId: string,
 ): Promise<TransactionProposal | null> {
-  const proposal = transactionProposals.find((p) => p.id === proposalId);
-  if (!proposal) return delay(null, 100);
+  const proposal = transactionProposalsCache.get(proposalId);
+  if (!proposal) return null;
   proposal.status = "rejected";
   proposal.rejectedAt = new Date().toISOString();
-  return delay({ ...proposal }, 150);
+  transactionProposalsCache.set(proposalId, proposal);
+  return { ...proposal };
 }
 
 // Get offers and messages for a specific listing
@@ -244,19 +248,19 @@ export async function getListingConversation(
   listingId: string,
   userId: string,
 ): Promise<{ messages: ChatMessage[]; proposals: TransactionProposal[] } | null> {
-  const chat = chats.find(
+  const userChats = Array.from(chatsCache.values());
+  const chat = userChats.find(
     (c) => c.listingId === listingId && c.participantIds.includes(userId),
   );
-  if (!chat) return delay(null, 100);
+  if (!chat) return null;
 
-  const proposals = transactionProposals.filter((p) => p.chatId === chat.id);
-  return delay(
-    {
-      messages: [...chat.messages],
-      proposals: [...proposals],
-    },
-    150,
+  const proposals = Array.from(transactionProposalsCache.values()).filter(
+    (p) => p.chatId === chat.id,
   );
+  return {
+    messages: [...chat.messages],
+    proposals: [...proposals],
+  };
 }
 
 // Get all user offers (both sent and received)
@@ -272,29 +276,24 @@ export async function getUserOffers(
     }
   >
 > {
-  const userChats = chats.filter((c) => c.participantIds.includes(userId));
-  const userProposals = transactionProposals.filter(
-    (p) =>
-      p.proposedBy === userId ||
-      p.proposedTo === userId,
+  const userChats = Array.from(chatsCache.values()).filter((c) =>
+    c.participantIds.includes(userId),
+  );
+  const userProposals = Array.from(transactionProposalsCache.values()).filter(
+    (p) => p.proposedBy === userId || p.proposedTo === userId,
   );
 
   const enriched = userProposals.map((proposal) => {
     const chat = userChats.find((c) => c.id === proposal.chatId);
-    const listing = chats.find((c) => c.id === proposal.chatId)?.listing;
 
     return {
       ...proposal,
       chatId: proposal.chatId,
       listingId: chat?.listingId || "",
-      productName: listing?.productName || "Unknown Product",
-      type: listing?.type || ("purchase" as const),
+      productName: "Unknown Product",
+      type: ("purchase" as const),
     };
   });
 
-  return delay(enriched, 300);
-}
-
-function delay<T>(value: T, ms: number): Promise<T> {
-  return new Promise((res) => setTimeout(() => res(value), ms));
+  return enriched;
 }
