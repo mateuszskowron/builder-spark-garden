@@ -281,6 +281,7 @@ const resources = {
   pl: {
     common: {
       appName: "Panel Klienta",
+      back: "Wstecz",
       login: {
         title: "Zaloguj się do konta",
         email: "Email",
@@ -412,8 +413,17 @@ const resources = {
         purchase: "Zakup",
         status: "Status",
         createdAt: "Data Utworzenia",
+        updatedAt: "Data Aktualizacji",
         actions: "Akcje",
         contact: "Skontaktuj się ze Sprzedawcą",
+        contactSeller: "Skontaktuj się ze Sprzedawcą",
+        seller: "Informacje o Sprzedawcy",
+        company: "Firma",
+        address: "Adres",
+        details: "Szczegóły Ogłoszenia",
+        timeline: "Historia",
+        notFound: "Ogłoszenie nie znalezione",
+        makeOffer: "Złóż Ofertę",
         create: "Utwórz Ogłoszenie",
         cancel: "Anuluj",
         filters: {
