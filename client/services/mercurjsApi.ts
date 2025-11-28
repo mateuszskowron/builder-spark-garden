@@ -2,7 +2,9 @@ import Medusa from "@medusajs/js-sdk";
 
 const BACKEND_URL =
   typeof window !== "undefined"
-    ? localStorage.getItem("mercurjs:backend-url") || "http://localhost:9000"
+    ? localStorage.getItem("mercurjs:backend-url") ||
+      import.meta.env.VITE_BACKEND_URL ||
+      "http://localhost:9000"
     : "http://localhost:9000";
 
 export const sdk = new Medusa({
