@@ -46,7 +46,11 @@ export const handleMercurJsProxy: RequestHandler = async (req, res) => {
       fetchOptions.body = JSON.stringify(req.body);
     }
 
+    console.log(`[Proxy] Fetch options:`, JSON.stringify(fetchOptions, null, 2));
+
     const response = await fetch(targetUrl, fetchOptions);
+
+    console.log(`[Proxy] Response status: ${response.status}`);
 
     // Get response body
     const contentType = response.headers.get("content-type");
