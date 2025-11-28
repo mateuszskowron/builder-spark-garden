@@ -90,8 +90,13 @@ export function MakeOfferDialog({
         userName: user.name,
       });
 
-      // Create offer message
-      const offerMessage = `Oferta na ${listing.productName}:\nIlość: ${quantity} ${listing.unit}\nCena: ${price} ${listing.currency}\nData dostawy: ${deliveryDate}${notes ? `\n\nUwagi: ${notes}` : ""}`;
+      // Create offer message with translations
+      const offerLabel = t("listings.makeOffer") || "Make an Offer";
+      const quantityLabel = t("listings.quantity") || "Quantity";
+      const priceLabel = t("listings.price") || "Price";
+      const deliveryLabel = t("listings.deliveryDate") || "Delivery Date";
+      const notesLabel = t("listings.notes") || "Notes";
+      const offerMessage = `${offerLabel} ${listing.productName}:\n${quantityLabel}: ${quantity} ${listing.unit}\n${priceLabel}: ${price} ${listing.currency}\n${deliveryLabel}: ${deliveryDate}${notes ? `\n\n${notesLabel}: ${notes}` : ""}`;
 
       await sendMessage(chat.id, user.id, user.name, offerMessage);
 
