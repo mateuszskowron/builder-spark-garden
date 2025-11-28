@@ -214,6 +214,7 @@ export type PluginId =
   | "sales"
   | "purchases"
   | "chat"
+  | "offers"
   | "contact"
   | (string & {});
 
