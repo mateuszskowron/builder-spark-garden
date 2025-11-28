@@ -90,6 +90,21 @@ export function getBuiltinPlugins(): PluginDefinition[] {
       icon: ClipboardList,
       requiredRole: ["admin"],
     },
+    {
+      id: "sales",
+      path: "/sales",
+      titleKey: "nav.sales",
+    },
+    {
+      id: "purchases",
+      path: "/purchases",
+      titleKey: "nav.purchases",
+    },
+    {
+      id: "my-listings",
+      path: "/my-listings",
+      titleKey: "nav.myListings",
+    },
   ];
 }
 
