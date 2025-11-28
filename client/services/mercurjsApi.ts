@@ -9,6 +9,7 @@ export const sdk = new Medusa({
   auth: {
     type: "session",
   },
+  publishableKey: "pk_d6a9391a6f4e32c2eb09d0031ccd8bfd5f28e14fb7c0b4db1d861ba6defd15bd"
 });
 
 // Helper to store token
