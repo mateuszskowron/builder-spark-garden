@@ -40,11 +40,19 @@ export function setBackendUrl(url: string) {
 // Health check
 export async function checkBackendHealth(): Promise<boolean> {
   try {
+    console.log(`[MercurJS] Checking health at: ${BACKEND_URL}/health`);
     const response = await fetch(`${BACKEND_URL}/health`, {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
+    console.log(`[MercurJS] Health check status: ${response.status}`);
     return response.ok;
-  } catch {
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : "Unknown error";
+    console.error(`[MercurJS] Health check failed: ${errorMsg}`);
+    console.error("[MercurJS] Backend URL:", BACKEND_URL);
     return false;
   }
 }
