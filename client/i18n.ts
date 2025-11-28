@@ -157,6 +157,17 @@ const resources = {
           reset: "Reset Filters",
         },
       },
+      chat: {
+        title: "Chat",
+        description: "Communicate with other users about listings",
+        conversations: "Conversations",
+        search: "Search messages",
+        empty: "No active conversations",
+        messagePlaceholder: "Type a message...",
+        selectConversation: "Select a conversation to start messaging",
+        sellingProduct: "Selling",
+        buyingProduct: "Buying",
+      },
       admin: {
         companies: {
           title: "Companies",
