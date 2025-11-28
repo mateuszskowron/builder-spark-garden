@@ -202,10 +202,13 @@ export async function getOrders(filters?: { limit?: number; offset?: number }) {
 
 export async function getOrderById(id: string) {
   try {
+    console.log("[MercurJS] Fetching order by ID:", id);
     const { order } = await sdk.store.order.retrieve(id);
+    console.log("[MercurJS] Order retrieved:", order);
     return order;
   } catch (error) {
-    console.error("Failed to get order:", error);
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.error("[MercurJS] Failed to get order:", errorMsg);
     return null;
   }
 }
