@@ -1,7 +1,7 @@
 import Medusa from "@medusajs/js-sdk";
 
 // Use backend proxy on same origin to avoid CORS issues
-const BACKEND_URL = "https://medusa.zh.unitymsp.it/api/mercurjs";
+const BACKEND_URL = "https://medusa.zh.unitymsp.it";
 
 export const sdk = new Medusa({
   baseUrl: BACKEND_URL,
