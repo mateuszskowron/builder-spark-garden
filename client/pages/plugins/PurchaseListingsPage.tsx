@@ -427,14 +427,14 @@ export default function PurchaseListingsPage() {
               <Select
                 value={filters.category}
                 onValueChange={(value) =>
-                  setFilters({ ...filters, category: value })
+                  setFilters({ ...filters, category: value === "all" ? "" : value })
                 }
               >
                 <SelectTrigger id="filterCategory">
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All</SelectItem>
+                  <SelectItem value="all">All</SelectItem>
                   {categories.map((c) => (
                     <SelectItem key={c.id} value={c.id}>
                       {c.name}
