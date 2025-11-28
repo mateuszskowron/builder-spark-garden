@@ -21,6 +21,7 @@ import PurchaseListingsPage from "./pages/plugins/PurchaseListingsPage";
 import MyListingsPage from "./pages/plugins/MyListingsPage";
 import ChatPage from "./pages/plugins/ChatPage";
 import ContactPage from "./pages/plugins/ContactPage";
+import ListingDetailPage from "./pages/plugins/ListingDetailPage";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { AuthProvider, useAuth } from "@/state/AuthContext";
 
@@ -164,6 +165,17 @@ function AppRoutes() {
           <Protected>
             <AppLayout>
               <ContactPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/listings/:id"
+        element={
+          <Protected>
+            <AppLayout>
+              <ListingDetailPage />
             </AppLayout>
           </Protected>
         }
