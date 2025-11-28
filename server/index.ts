@@ -21,6 +21,9 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Test endpoint
+  app.get("/api/test-proxy", testProxyConnection);
+
   // MercurJS Proxy routes
   app.options(/^\/api\/mercurjs($|\/)/, handleMercurJsProxyOptions);
   app.all(/^\/api\/mercurjs($|\/)/, handleMercurJsProxy);
