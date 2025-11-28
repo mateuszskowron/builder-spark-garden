@@ -437,6 +437,27 @@ const resources = {
         sellingProduct: "Sprzedaż",
         buyingProduct: "Zakup",
       },
+      contact: {
+        title: "Skontaktuj się z nami",
+        description: "Nawiąż kontakt z naszym zespołem",
+        email: "Email",
+        emailDescription: "Wyślij nam wiadomość w sprawie ogólnych pytań",
+        phone: "Telefon",
+        phoneDescription: "Zadzwoń do nas w godzinach pracy",
+        address: "Adres",
+        businessHours: "Godziny Pracy",
+        mondayFriday: "Poniedziałek - Piątek",
+        saturday: "Sobota",
+        sunday: "Niedziela",
+        closed: "Zamknięte",
+        aboutUs: "O Giełdzie Spożywczej",
+        aboutText1:
+          "Giełda Spożywcza to nowoczesna platforma przeznaczona do łączenia producentów żywności, przetwórców i sprzedawców detalicznych na jednym zunifikowanym rynku.",
+        aboutText2:
+          "Naszą misją jest uproszczenie handlu rolnego, zmniejszenie marnowania żywności i stworzenie oportunistycznych dla uczciwych cen i praktyk zrównoważonych w łańcuchu dostaw żywności.",
+        aboutText3:
+          "Dzięki naszym kompleksowym narzędziom do zarządzania ogłoszeniami, komunikacji i śledzenia transakcji, ułatwiamy efektywne i bezpieczne prowadzenie interesów.",
+      },
       admin: {
         companies: {
           title: "Firmy",
