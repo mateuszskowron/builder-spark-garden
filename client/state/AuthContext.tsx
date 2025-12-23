@@ -10,6 +10,7 @@ import {
 
 interface AuthContextProps {
   user: User | null;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
   updateName: (name: string) => Promise<boolean>;
@@ -19,14 +20,20 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setUser(getCurrentUser());
+    const storedUser = getCurrentUser();
+    if (storedUser) {
+      setUser(storedUser);
+    }
+    setIsLoading(false);
   }, []);
 
   const value = useMemo(
     () => ({
       user,
+      isLoading,
       login: async (email: string, password: string) => {
         const u = await doLogin(email, password);
         if (u) {
@@ -50,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return false;
       },
     }),
-    [user],
+    [user, isLoading],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
