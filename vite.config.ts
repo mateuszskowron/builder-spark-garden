@@ -16,6 +16,12 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: "dist/spa",
+    commonjsOptions: {
+      include: [/node_modules/],
+    },
+  },
+  optimizeDeps: {
+    include: ["@medusajs/js-sdk"],
   },
   plugins: [react(), expressPlugin()],
   resolve: {
