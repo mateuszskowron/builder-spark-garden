@@ -27,6 +27,7 @@ import {
   getSalesListings,
   getAllProductCategories,
   createListing,
+  DEFAULT_CATEGORIES,
 } from "@/controllers/listingsController";
 import { Plus, MessageSquare, MapPin, Calendar } from "lucide-react";
 
@@ -36,7 +37,8 @@ export default function SalesListingsPage() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [listings, setListings] = useState<Listing[]>([]);
-  const [categories, setCategories] = useState<ProductCategory[]>([]);
+  // Initialize with default categories to ensure they're always available
+  const [categories, setCategories] = useState<ProductCategory[]>(DEFAULT_CATEGORIES);
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -70,14 +72,20 @@ export default function SalesListingsPage() {
   }, [filters]);
 
   const loadData = async () => {
+    setIsLoading(true);
+
+    // Load categories first (always succeeds with defaults)
     try {
-      setIsLoading(true);
-      const [listingsData, categoriesData] = await Promise.all([
-        getSalesListings(filters),
-        getAllProductCategories(),
-      ]);
-      setListings(listingsData);
+      const categoriesData = await getAllProductCategories();
       setCategories(categoriesData);
+    } catch (error) {
+      console.error("Failed to load categories:", error);
+    }
+
+    // Load listings separately
+    try {
+      const listingsData = await getSalesListings(filters);
+      setListings(listingsData);
     } catch (error) {
       toast({
         title: "Error",
@@ -364,14 +372,14 @@ export default function SalesListingsPage() {
               </div>
               <div className="flex gap-2 pt-4">
                 <Button type="submit" className="flex-1">
-                  {t("listings.create")}
+                  {t("listings.create.submit")}
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setIsDialogOpen(false)}
                 >
-                  {t("listings.cancel")}
+                  {t("common.cancel")}
                 </Button>
               </div>
             </form>
