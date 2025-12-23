@@ -1,4 +1,5 @@
 import { useState } from "react";
+// useEffect removed - categories are now loaded synchronously
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/state/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -21,9 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createListing, getAllProductCategories } from "@/controllers/listingsController";
+import { createListing, DEFAULT_CATEGORIES } from "@/controllers/listingsController";
 import type { ProductCategory } from "@/models/types";
-import { useEffect } from "react";
 
 interface CreateListingDialogProps {
   open: boolean;
@@ -50,31 +50,10 @@ export function CreateListingDialog({
   const [location, setLocation] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
-  const [categories, setCategories] = useState<ProductCategory[]>([]);
+  // Use default categories directly - no loading needed
+  const categories: ProductCategory[] = DEFAULT_CATEGORIES;
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
-
-  useEffect(() => {
-    if (open) {
-      loadCategories();
-    }
-  }, [open]);
-
-  const loadCategories = async () => {
-    try {
-      setIsLoadingCategories(true);
-      const data = await getAllProductCategories();
-      setCategories(data);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: t("listings.loadCategoriesError") || "Failed to load categories",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoadingCategories(false);
-    }
-  };
+  const isLoadingCategories = false;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

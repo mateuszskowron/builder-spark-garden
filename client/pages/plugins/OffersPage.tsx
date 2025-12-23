@@ -176,11 +176,11 @@ export default function OffersPage() {
   const getStatusLabel = (status: string) => {
     switch (status) {
       case "pending":
-        return "Pending";
+        return t("offers.pending");
       case "accepted":
-        return "Accepted";
+        return t("offers.accepted");
       case "rejected":
-        return "Rejected";
+        return t("offers.rejected");
       default:
         return status;
     }
@@ -291,7 +291,7 @@ export default function OffersPage() {
       </Card>
 
       {isLoading ? (
-        <div className="text-center py-8">Loading...</div>
+        <div className="text-center py-8">{t("loading")}</div>
       ) : filteredOffers.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
           {t("offers.empty") || "No offers found"}

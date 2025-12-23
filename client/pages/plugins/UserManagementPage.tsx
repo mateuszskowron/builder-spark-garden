@@ -40,12 +40,12 @@ import {
 } from "@/controllers/userManagementController";
 import { Plus, Edit2, Key, Trash2 } from "lucide-react";
 
-const USER_ROLES: { value: UserRole; label: string }[] = [
-  { value: "admin", label: "Administrator" },
-  { value: "manager", label: "Manager" },
-  { value: "buyer", label: "Buyer" },
-  { value: "seller", label: "Seller" },
-  { value: "user", label: "User" },
+const USER_ROLE_KEYS: { value: UserRole; labelKey: string }[] = [
+  { value: "admin", labelKey: "admin.users.roleAdministrator" },
+  { value: "manager", labelKey: "admin.users.roleManager" },
+  { value: "buyer", labelKey: "admin.users.roleBuyer" },
+  { value: "seller", labelKey: "admin.users.roleSeller" },
+  { value: "user", labelKey: "admin.users.roleUser" },
 ];
 
 export default function UserManagementPage() {
@@ -79,8 +79,8 @@ export default function UserManagementPage() {
       setCompanies(companiesData);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to load data",
+        title: t("error"),
+        description: t("admin.users.loadError"),
         variant: "destructive",
       });
     } finally {
@@ -107,8 +107,8 @@ export default function UserManagementPage() {
 
     if (!formData.companyId || !formData.name || !formData.email) {
       toast({
-        title: "Validation Error",
-        description: "Please fill in all required fields",
+        title: t("admin.users.validationError"),
+        description: t("admin.users.fillRequired"),
         variant: "destructive",
       });
       return;
@@ -119,13 +119,13 @@ export default function UserManagementPage() {
       setUsers([...users, newUser]);
       setIsDialogOpen(false);
       toast({
-        title: "Success",
-        description: "User created successfully",
+        title: t("success"),
+        description: t("admin.users.created"),
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to create user",
+        title: t("error"),
+        description: t("admin.users.createError"),
         variant: "destructive",
       });
     }
@@ -137,14 +137,16 @@ export default function UserManagementPage() {
       if (updated) {
         setUsers(users.map((u) => (u.id === updated.id ? updated : u)));
         toast({
-          title: "Success",
-          description: `User ${updated.active ? "activated" : "deactivated"}`,
+          title: t("success"),
+          description: updated.active
+            ? t("admin.users.activate")
+            : t("admin.users.deactivate"),
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to toggle user status",
+        title: t("error"),
+        description: t("admin.users.updateError"),
         variant: "destructive",
       });
     }
@@ -156,14 +158,14 @@ export default function UserManagementPage() {
       if (updated) {
         setUsers(users.map((u) => (u.id === updated.id ? updated : u)));
         toast({
-          title: "Success",
-          description: "User role updated",
+          title: t("success"),
+          description: t("admin.users.updated"),
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to update user role",
+        title: t("error"),
+        description: t("admin.users.updateError"),
         variant: "destructive",
       });
     }
@@ -173,34 +175,34 @@ export default function UserManagementPage() {
     try {
       const tempPassword = await resetUserPassword(user.id);
       toast({
-        title: "Success",
-        description: `Temporary password: ${tempPassword}`,
+        title: t("success"),
+        description: t("admin.users.passwordReset", { password: tempPassword }),
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to reset password",
+        title: t("error"),
+        description: t("admin.users.resetError"),
         variant: "destructive",
       });
     }
   };
 
   const handleDeleteUser = async (user: CompanyUser) => {
-    if (!confirm(`Are you sure you want to delete ${user.name}?`)) return;
+    if (!confirm(t("admin.users.confirmDelete", { name: user.name }))) return;
 
     try {
       const success = await deleteCompanyUser(user.id);
       if (success) {
         setUsers(users.filter((u) => u.id !== user.id));
         toast({
-          title: "Success",
-          description: "User deleted",
+          title: t("success"),
+          description: t("admin.users.deleted"),
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to delete user",
+        title: t("error"),
+        description: t("admin.users.deleteError"),
         variant: "destructive",
       });
     }
@@ -238,7 +240,7 @@ export default function UserManagementPage() {
                   }
                 >
                   <SelectTrigger id="company">
-                    <SelectValue placeholder="Select company" />
+                    <SelectValue placeholder={t("admin.users.companyPlaceholder")} />
                   </SelectTrigger>
                   <SelectContent>
                     {companies.map((c) => (
@@ -257,7 +259,7 @@ export default function UserManagementPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  placeholder="Full name"
+                  placeholder={t("admin.users.namePlaceholder")}
                   required
                 />
               </div>
@@ -270,7 +272,7 @@ export default function UserManagementPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  placeholder="Email address"
+                  placeholder={t("admin.users.emailPlaceholder")}
                   required
                 />
               </div>
@@ -286,12 +288,12 @@ export default function UserManagementPage() {
                   }
                 >
                   <SelectTrigger id="role">
-                    <SelectValue placeholder="Select role" />
+                    <SelectValue placeholder={t("admin.users.rolePlaceholder")} />
                   </SelectTrigger>
                   <SelectContent>
-                    {USER_ROLES.map((r) => (
+                    {USER_ROLE_KEYS.map((r) => (
                       <SelectItem key={r.value} value={r.value}>
-                        {r.label}
+                        {t(r.labelKey)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -320,10 +322,10 @@ export default function UserManagementPage() {
             <CardTitle>{t("admin.users.listTitle")}</CardTitle>
             <Select value={selectedCompanyFilter === "" ? "all" : selectedCompanyFilter} onValueChange={(value) => setSelectedCompanyFilter(value === "all" ? "" : value)}>
               <SelectTrigger className="w-48">
-                <SelectValue placeholder="All companies" />
+                <SelectValue placeholder={t("admin.users.allCompanies")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All companies</SelectItem>
+                <SelectItem value="all">{t("admin.users.allCompanies")}</SelectItem>
                 {companies.map((c) => (
                   <SelectItem key={c.id} value={c.id}>
                     {c.name}
@@ -335,7 +337,7 @@ export default function UserManagementPage() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <div className="text-center py-8">Loading...</div>
+            <div className="text-center py-8">{t("loading")}</div>
           ) : filteredUsers.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               {t("admin.users.empty")}
@@ -370,9 +372,9 @@ export default function UserManagementPage() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {USER_ROLES.map((r) => (
+                            {USER_ROLE_KEYS.map((r) => (
                               <SelectItem key={r.value} value={r.value}>
-                                {r.label}
+                                {t(r.labelKey)}
                               </SelectItem>
                             ))}
                           </SelectContent>

@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@medusajs/js-sdk':
+        specifier: ^2.12.3
+        version: 2.12.3
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1
@@ -455,6 +458,10 @@ packages:
 
   '@mediapipe/tasks-vision@0.10.17':
     resolution: {integrity: sha512-CZWV/q6TTe8ta61cZXjfnnHsfWIdFhms03M9T7Cnd5y2mdpylJM0rF1qRq+wsQVRMLz1OYPVEBU9ph2Bx8cxrg==}
+
+  '@medusajs/js-sdk@2.12.3':
+    resolution: {integrity: sha512-8Tmmywg/VToTTwyhInSZMO0t0MuYgoak+e1o8xIXsH/Hp+7kkoXKRalib3/t9pnNC/L9s9vI9Slj+P1v9z0RxA==}
+    engines: {node: '>=20'}
 
   '@monogrid/gainmap-js@3.1.0':
     resolution: {integrity: sha512-Obb0/gEd/HReTlg8ttaYk+0m62gQJmCblMOjHSMHRrBP2zdfKMHLCRbh/6ex9fSUJMKdjjIEiohwkbGD3wj2Nw==}
@@ -1889,6 +1896,9 @@ packages:
       picomatch:
         optional: true
 
+  fetch-event-stream@0.1.6:
+    resolution: {integrity: sha512-GREtJ5HNikdU2AXtZ6E/5bk+aslMU6ie5mPG6H9nvsdDkkHQ6m5lHwmmmDTOBexok9hApQ7EprsXCdmz9ZC68w==}
+
   fflate@0.6.10:
     resolution: {integrity: sha512-IQrh3lEPM93wVCEczc9SaAOvkmcoQn/G8Bo1e8ZPlY3X3bnAxWaBdvTdvM1hP62iZp0BXWDy4vTAy4fF0+Dlpg==}
 
@@ -3100,6 +3110,11 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.5
 
   '@mediapipe/tasks-vision@0.10.17': {}
+
+  '@medusajs/js-sdk@2.12.3':
+    dependencies:
+      fetch-event-stream: 0.1.6
+      qs: 6.14.0
 
   '@monogrid/gainmap-js@3.1.0(three@0.176.0)':
     dependencies:
@@ -4580,6 +4595,8 @@ snapshots:
   fdir@6.4.6(picomatch@4.0.3):
     optionalDependencies:
       picomatch: 4.0.3
+
+  fetch-event-stream@0.1.6: {}
 
   fflate@0.6.10: {}
 

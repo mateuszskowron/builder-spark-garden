@@ -11,39 +11,92 @@ import {
   createProduct,
 } from "@/services/mercurjsApi";
 
-// Product Categories
+// Default product categories (fallback when backend returns empty)
+export const DEFAULT_CATEGORIES: ProductCategory[] = [
+  { id: "vegetables", name: "Warzywa", description: "Świeże warzywa", createdAt: new Date().toISOString() },
+  { id: "fruits", name: "Owoce", description: "Świeże owoce", createdAt: new Date().toISOString() },
+  { id: "grains", name: "Zboża", description: "Zboża i produkty zbożowe", createdAt: new Date().toISOString() },
+  { id: "dairy", name: "Nabiał", description: "Produkty mleczne", createdAt: new Date().toISOString() },
+  { id: "meat", name: "Mięso", description: "Mięso i wędliny", createdAt: new Date().toISOString() },
+  { id: "poultry", name: "Drób", description: "Kurczaki, indyki i inne", createdAt: new Date().toISOString() },
+  { id: "eggs", name: "Jaja", description: "Jaja kurze i inne", createdAt: new Date().toISOString() },
+  { id: "honey", name: "Miód", description: "Miód i produkty pszczele", createdAt: new Date().toISOString() },
+  { id: "herbs", name: "Zioła", description: "Świeże i suszone zioła", createdAt: new Date().toISOString() },
+  { id: "preserves", name: "Przetwory", description: "Dżemy, konfitury, kiszonki", createdAt: new Date().toISOString() },
+  { id: "oils", name: "Oleje", description: "Oleje roślinne", createdAt: new Date().toISOString() },
+  { id: "nuts", name: "Orzechy", description: "Orzechy i nasiona", createdAt: new Date().toISOString() },
+  { id: "organic", name: "Bio/Eko", description: "Produkty ekologiczne", createdAt: new Date().toISOString() },
+  { id: "other", name: "Inne", description: "Inne produkty rolne", createdAt: new Date().toISOString() },
+];
+
+// ============ DEMO MODE FUNCTIONS ============
+// Local storage key for demo listings
+const DEMO_LISTINGS_KEY = "app:demo-listings";
+
+// Get demo listings from localStorage
+function getDemoListings(): Listing[] {
+  try {
+    const stored = localStorage.getItem(DEMO_LISTINGS_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+// Save demo listings to localStorage
+function saveDemoListings(listings: Listing[]) {
+  localStorage.setItem(DEMO_LISTINGS_KEY, JSON.stringify(listings));
+}
+
+// Check if running in demo mode
+function isDemoMode(): boolean {
+  return localStorage.getItem("app:demo-mode") === "true";
+}
+// ============================================
+
+// Helper to get category name synchronously (for display purposes)
+export function getCategoryNameById(id: string): string {
+  const category = DEFAULT_CATEGORIES.find((c) => c.id === id);
+  return category?.name || id;
+}
+
+// Product Categories - always returns default categories (backend-independent)
 export async function getAllProductCategories(): Promise<ProductCategory[]> {
+  // Always return default categories to ensure the app works without backend
+  // This provides a reliable, instant response for category selection
+  return DEFAULT_CATEGORIES;
+}
+
+// Alternative function that tries backend first (for future use when backend is ready)
+export async function getAllProductCategoriesFromBackend(): Promise<ProductCategory[]> {
   try {
     const response = await getCollections({ limit: 100 });
-    return (response.collections || []).map((collection: any) => ({
+    const backendCategories = (response.collections || []).map((collection: any) => ({
       id: collection.id,
       name: collection.title,
       description: collection.description,
       createdAt: collection.created_at || new Date().toISOString(),
     }));
+
+    // Return backend categories if available, otherwise use defaults
+    if (backendCategories.length > 0) {
+      return backendCategories;
+    }
+
+    console.log("[Categories] Using default categories (backend returned empty)");
+    return DEFAULT_CATEGORIES;
   } catch (error) {
-    console.error("Failed to get categories:", error);
-    return [];
+    console.error("Failed to get categories from backend, using defaults:", error);
+    return DEFAULT_CATEGORIES;
   }
 }
 
 export async function getProductCategoryById(
   id: string,
 ): Promise<ProductCategory | null> {
-  try {
-    const response = await getCollections();
-    const collection = response.collections?.find((c: any) => c.id === id);
-    if (!collection) return null;
-    return {
-      id: collection.id,
-      name: collection.title,
-      description: collection.description,
-      createdAt: collection.created_at || new Date().toISOString(),
-    };
-  } catch (error) {
-    console.error("Failed to get category:", error);
-    return null;
-  }
+  // Use default categories for reliable operation
+  const category = DEFAULT_CATEGORIES.find((c) => c.id === id);
+  return category || null;
 }
 
 export async function createProductCategory(data: {
@@ -60,6 +113,75 @@ export async function createProductCategory(data: {
   };
 }
 
+// Apply filters and sorting to listings
+function applyFiltersAndSort(listings: Listing[], filters?: {
+  type?: "sale" | "purchase";
+  status?: ListingStatus;
+  city?: string;
+  country?: string;
+  category?: string;
+  searchText?: string;
+  sortBy?: "name" | "price" | "date" | "category";
+  sortOrder?: "asc" | "desc";
+}): Listing[] {
+  let results = [...listings];
+
+  if (filters) {
+    if (filters.type) {
+      results = results.filter((l) => l.type === filters.type);
+    }
+    if (filters.status) {
+      results = results.filter((l) => l.status === filters.status);
+    }
+    if (filters.searchText) {
+      const search = filters.searchText.toLowerCase();
+      results = results.filter((l) =>
+        l.productName.toLowerCase().includes(search) ||
+        l.description.toLowerCase().includes(search)
+      );
+    }
+    if (filters.city) {
+      results = results.filter((l) =>
+        l.city.toLowerCase().includes(filters.city!.toLowerCase()),
+      );
+    }
+    if (filters.country) {
+      results = results.filter((l) =>
+        l.country.toLowerCase().includes(filters.country!.toLowerCase()),
+      );
+    }
+    if (filters.category) {
+      results = results.filter((l) => l.productCategory === filters.category);
+    }
+
+    // Sorting
+    if (filters.sortBy) {
+      results.sort((a, b) => {
+        let comparison = 0;
+        switch (filters.sortBy) {
+          case "name":
+            comparison = a.productName.localeCompare(b.productName);
+            break;
+          case "price":
+            comparison = a.price - b.price;
+            break;
+          case "date":
+            comparison =
+              new Date(b.createdAt).getTime() -
+              new Date(a.createdAt).getTime();
+            break;
+          case "category":
+            comparison = a.productCategory.localeCompare(b.productCategory);
+            break;
+        }
+        return filters.sortOrder === "desc" ? -comparison : comparison;
+      });
+    }
+  }
+
+  return results;
+}
+
 // Listings
 export async function getAllListings(filters?: {
   type?: "sale" | "purchase";
@@ -71,14 +193,23 @@ export async function getAllListings(filters?: {
   sortBy?: "name" | "price" | "date" | "category";
   sortOrder?: "asc" | "desc";
 }): Promise<Listing[]> {
+  // Always include demo listings from localStorage
+  const demoListings = getDemoListings();
+
+  if (isDemoMode()) {
+    // Demo mode - only use local listings
+    console.log("[Demo] Returning local listings:", demoListings.length);
+    return applyFiltersAndSort(demoListings, filters);
+  }
+
+  // Real mode - try to get from API and merge with demo listings
   try {
     const response = await getProducts({
       q: filters?.searchText,
       limit: 100,
     });
 
-    let results = (response.products || []).map((product: any) => {
-      // Map MercurJS product to our Listing type
+    const apiListings = (response.products || []).map((product: any) => {
       const listing: Listing = {
         id: product.id,
         companyId: product.vendor_id || "unknown",
@@ -102,63 +233,37 @@ export async function getAllListings(filters?: {
       return listing;
     });
 
-    // Apply filters
-    if (filters) {
-      if (filters.type) {
-        results = results.filter((l) => l.type === filters.type);
-      }
-      if (filters.status) {
-        results = results.filter((l) => l.status === filters.status);
-      }
-      if (filters.city) {
-        results = results.filter((l) =>
-          l.city.toLowerCase().includes(filters.city!.toLowerCase()),
-        );
-      }
-      if (filters.country) {
-        results = results.filter((l) =>
-          l.country.toLowerCase().includes(filters.country!.toLowerCase()),
-        );
-      }
-      if (filters.category) {
-        results = results.filter((l) => l.productCategory === filters.category);
-      }
-
-      // Sorting
-      if (filters.sortBy) {
-        results.sort((a, b) => {
-          let comparison = 0;
-          switch (filters.sortBy) {
-            case "name":
-              comparison = a.productName.localeCompare(b.productName);
-              break;
-            case "price":
-              comparison = a.price - b.price;
-              break;
-            case "date":
-              comparison =
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime();
-              break;
-            case "category":
-              comparison = a.productCategory.localeCompare(b.productCategory);
-              break;
-          }
-          return filters.sortOrder === "desc" ? -comparison : comparison;
-        });
-      }
-    }
-
-    return results;
+    // Merge API listings with demo listings
+    const allListings = [...apiListings, ...demoListings];
+    return applyFiltersAndSort(allListings, filters);
   } catch (error) {
-    console.error("Failed to get listings:", error);
-    return [];
+    console.error("Failed to get listings from API, using demo listings:", error);
+    // Fallback to demo listings only
+    return applyFiltersAndSort(demoListings, filters);
   }
 }
 
 export async function getListingById(
   id: string,
 ): Promise<ListingDetail | null> {
+  // Check demo listings first
+  const demoListings = getDemoListings();
+  const demoListing = demoListings.find(l => l.id === id);
+
+  if (demoListing) {
+    const detail: ListingDetail = {
+      ...demoListing,
+      seller: {
+        id: demoListing.companyId,
+        name: demoListing.companyName,
+        email: "demo@example.com",
+        phone: "+48 123 456 789",
+      },
+    };
+    return detail;
+  }
+
+  // Try API
   try {
     const product = await getProductById(id);
     if (!product) return null;
@@ -204,9 +309,18 @@ export async function getListingById(
 export async function getCompanyListings(
   companyId: string,
 ): Promise<Listing[]> {
+  // Get demo listings for this company
+  const demoListings = getDemoListings().filter(l => l.companyId === companyId);
+
+  if (isDemoMode()) {
+    console.log("[Demo] Returning company listings:", demoListings.length);
+    return demoListings;
+  }
+
+  // Try API
   try {
     const response = await getProducts({ limit: 100 });
-    const results = (response.products || [])
+    const apiResults = (response.products || [])
       .filter((p: any) => p.vendor_id === companyId)
       .map((product: any) => ({
         id: product.id,
@@ -228,10 +342,12 @@ export async function getCompanyListings(
         updatedAt: product.updated_at || new Date().toISOString(),
         createdBy: product.metadata?.created_by || "unknown",
       }));
-    return results;
+
+    // Merge with demo listings
+    return [...apiResults, ...demoListings];
   } catch (error) {
-    console.error("Failed to get company listings:", error);
-    return [];
+    console.error("Failed to get company listings from API:", error);
+    return demoListings;
   }
 }
 
@@ -252,6 +368,39 @@ export async function createListing(data: {
   imageUrl?: string;
   createdBy: string;
 }): Promise<Listing> {
+  if (isDemoMode()) {
+    // Demo mode - create listing locally
+    const newListing: Listing = {
+      id: `listing_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      companyId: data.companyId,
+      companyName: data.companyName,
+      type: data.type,
+      productName: data.productName,
+      productCategory: data.productCategory,
+      description: data.description,
+      price: data.price,
+      currency: data.currency,
+      unit: data.unit,
+      quantity: data.quantity,
+      location: data.location,
+      city: data.city,
+      country: data.country,
+      status: "approved", // Auto-approve in demo mode
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: data.createdBy,
+    };
+
+    // Save to localStorage
+    const listings = getDemoListings();
+    listings.push(newListing);
+    saveDemoListings(listings);
+
+    console.log("[Demo] Listing created locally:", newListing);
+    return newListing;
+  }
+
+  // Real mode - try MercurJS API
   try {
     const product = await createProduct({
       title: data.productName,
@@ -282,7 +431,7 @@ export async function createListing(data: {
       createdBy: data.createdBy,
     };
   } catch (error) {
-    console.error("Failed to create listing:", error);
+    console.error("Failed to create listing via API:", error);
     throw error;
   }
 }

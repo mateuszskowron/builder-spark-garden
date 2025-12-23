@@ -51,8 +51,8 @@ export default function ChatPage() {
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to load chats",
+        title: t("error"),
+        description: t("chat.loadError"),
         variant: "destructive",
       });
     } finally {
@@ -83,14 +83,14 @@ export default function ChatPage() {
         setChats(chats.map((c) => (c.id === updatedChat.id ? updatedChat : c)));
         setMessageText("");
         toast({
-          title: "Success",
-          description: "Message sent",
+          title: t("success"),
+          description: t("chat.messageSent"),
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to send message",
+        title: t("error"),
+        description: t("chat.sendError"),
         variant: "destructive",
       });
     }
@@ -105,14 +105,14 @@ export default function ChatPage() {
           setSelectedChat(updated);
         }
         toast({
-          title: "Success",
-          description: "Chat archived",
+          title: t("success"),
+          description: t("chat.archived"),
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to archive chat",
+        title: t("error"),
+        description: t("chat.archiveError"),
         variant: "destructive",
       });
     }
@@ -127,14 +127,14 @@ export default function ChatPage() {
           setSelectedChat(updated);
         }
         toast({
-          title: "Success",
-          description: "Chat closed",
+          title: t("success"),
+          description: t("chat.closed"),
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to close chat",
+        title: t("error"),
+        description: t("chat.closeError"),
         variant: "destructive",
       });
     }
@@ -155,8 +155,8 @@ export default function ChatPage() {
       setChats(results);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Search failed",
+        title: t("error"),
+        description: t("chat.searchError"),
         variant: "destructive",
       });
     }
@@ -196,7 +196,7 @@ export default function ChatPage() {
               <div className="space-y-2 pr-4">
                 {isLoading ? (
                   <div className="text-center text-muted-foreground py-4">
-                    Loading...
+                    {t("loading")}
                   </div>
                 ) : filteredChats.length === 0 ? (
                   <div className="text-center text-muted-foreground py-4">
@@ -214,11 +214,11 @@ export default function ChatPage() {
                       }`}
                     >
                       <div className="font-medium text-sm">
-                        {chat.listing?.productName || "Unknown Product"}
+                        {chat.listing?.productName || t("chat.unknownProduct")}
                       </div>
                       <div className="text-xs text-muted-foreground truncate">
                         {chat.messages[chat.messages.length - 1]?.content ||
-                          "No messages yet"}
+                          t("chat.noMessages")}
                       </div>
                       <div className="text-xs mt-1">
                         {new Date(chat.lastMessageAt).toLocaleDateString()}

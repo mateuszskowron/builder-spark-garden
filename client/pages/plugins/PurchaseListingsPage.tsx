@@ -27,6 +27,7 @@ import {
   getPurchaseListings,
   getAllProductCategories,
   createListing,
+  DEFAULT_CATEGORIES,
 } from "@/controllers/listingsController";
 import { Plus, MessageSquare, MapPin, Calendar } from "lucide-react";
 
@@ -36,7 +37,9 @@ export default function PurchaseListingsPage() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [listings, setListings] = useState<Listing[]>([]);
-  const [categories, setCategories] = useState<ProductCategory[]>([]);
+  // Initialize with default categories to ensure they're always available
+  const [categories, setCategories] =
+    useState<ProductCategory[]>(DEFAULT_CATEGORIES);
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -70,18 +73,24 @@ export default function PurchaseListingsPage() {
   }, [filters]);
 
   const loadData = async () => {
+    setIsLoading(true);
+
+    // Load categories first (always succeeds with defaults)
     try {
-      setIsLoading(true);
-      const [listingsData, categoriesData] = await Promise.all([
-        getPurchaseListings(filters),
-        getAllProductCategories(),
-      ]);
-      setListings(listingsData);
+      const categoriesData = await getAllProductCategories();
       setCategories(categoriesData);
     } catch (error) {
+      console.error("Failed to load categories:", error);
+    }
+
+    // Load listings separately
+    try {
+      const listingsData = await getPurchaseListings(filters);
+      setListings(listingsData);
+    } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to load data",
+        title: t("error"),
+        description: t("listings.loadError"),
         variant: "destructive",
       });
     } finally {
@@ -96,8 +105,8 @@ export default function PurchaseListingsPage() {
       setListings(data);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to load listings",
+        title: t("error"),
+        description: t("listings.loadError"),
         variant: "destructive",
       });
     } finally {
@@ -117,8 +126,8 @@ export default function PurchaseListingsPage() {
       !formData.country
     ) {
       toast({
-        title: "Validation Error",
-        description: "Please fill in all required fields",
+        title: t("validation.error"),
+        description: t("admin.companies.fillRequired"),
         variant: "destructive",
       });
       return;
@@ -126,8 +135,8 @@ export default function PurchaseListingsPage() {
 
     if (!user?.companyId) {
       toast({
-        title: "Error",
-        description: "You must be associated with a company",
+        title: t("error"),
+        description: t("listings.companyRequired"),
         variant: "destructive",
       });
       return;
@@ -166,13 +175,13 @@ export default function PurchaseListingsPage() {
       });
 
       toast({
-        title: "Success",
-        description: "Purchase listing created and awaiting approval",
+        title: t("success"),
+        description: t("listings.created"),
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to create listing",
+        title: t("error"),
+        description: t("listings.createError"),
         variant: "destructive",
       });
     }
@@ -225,7 +234,7 @@ export default function PurchaseListingsPage() {
                       productName: e.target.value,
                     })
                   }
-                  placeholder="e.g., Tomatoes"
+                  placeholder={t("listings.productNamePlaceholder")}
                   required
                 />
               </div>
@@ -238,7 +247,7 @@ export default function PurchaseListingsPage() {
                   }
                 >
                   <SelectTrigger id="category">
-                    <SelectValue placeholder="Select category" />
+                    <SelectValue placeholder={t("listings.selectCategory")} />
                   </SelectTrigger>
                   <SelectContent>
                     {categories.map((c) => (
@@ -250,9 +259,7 @@ export default function PurchaseListingsPage() {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="description">
-                  {t("listings.description")}
-                </Label>
+                <Label htmlFor="description">{t("listings.description")}</Label>
                 <textarea
                   id="description"
                   value={formData.description}
@@ -262,7 +269,7 @@ export default function PurchaseListingsPage() {
                       description: e.target.value,
                     })
                   }
-                  placeholder="What are you looking to purchase?"
+                  placeholder={t("listings.descriptionPlaceholder")}
                   className="w-full px-3 py-2 border rounded-md min-h-24"
                 />
               </div>
@@ -280,7 +287,7 @@ export default function PurchaseListingsPage() {
                         price: e.target.value,
                       })
                     }
-                    placeholder="Expected price"
+                    placeholder={t("listings.expectedPricePlaceholder")}
                     required
                   />
                 </div>
@@ -295,7 +302,7 @@ export default function PurchaseListingsPage() {
                         unit: e.target.value,
                       })
                     }
-                    placeholder="e.g., kg, l, pcs"
+                    placeholder={t("listings.unitPlaceholder")}
                     required
                   />
                 </div>
@@ -313,7 +320,7 @@ export default function PurchaseListingsPage() {
                       quantity: e.target.value,
                     })
                   }
-                  placeholder="Required quantity"
+                  placeholder={t("listings.requirementPlaceholder")}
                 />
               </div>
               <div>
@@ -327,7 +334,7 @@ export default function PurchaseListingsPage() {
                       location: e.target.value,
                     })
                   }
-                  placeholder="Delivery address"
+                  placeholder={t("listings.deliveryAddressPlaceholder")}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -342,7 +349,7 @@ export default function PurchaseListingsPage() {
                         city: e.target.value,
                       })
                     }
-                    placeholder="City"
+                    placeholder={t("listings.cityPlaceholder")}
                     required
                   />
                 </div>
@@ -357,21 +364,21 @@ export default function PurchaseListingsPage() {
                         country: e.target.value,
                       })
                     }
-                    placeholder="Country"
+                    placeholder={t("listings.countryPlaceholder")}
                     required
                   />
                 </div>
               </div>
               <div className="flex gap-2 pt-4">
                 <Button type="submit" className="flex-1">
-                  {t("listings.create")}
+                  {t("listings.create.submit")}
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setIsDialogOpen(false)}
                 >
-                  {t("listings.cancel")}
+                  {t("common.cancel")}
                 </Button>
               </div>
             </form>
@@ -388,7 +395,7 @@ export default function PurchaseListingsPage() {
             <Label htmlFor="search">{t("listings.filters.search")}</Label>
             <Input
               id="search"
-              placeholder="Search by product name..."
+              placeholder={t("listings.filters.searchPlaceholder")}
               value={filters.searchText}
               onChange={(e) =>
                 setFilters({ ...filters, searchText: e.target.value })
@@ -400,7 +407,7 @@ export default function PurchaseListingsPage() {
               <Label htmlFor="filterCity">{t("listings.filters.city")}</Label>
               <Input
                 id="filterCity"
-                placeholder="City"
+                placeholder={t("listings.cityPlaceholder")}
                 value={filters.city}
                 onChange={(e) =>
                   setFilters({ ...filters, city: e.target.value })
@@ -413,7 +420,7 @@ export default function PurchaseListingsPage() {
               </Label>
               <Input
                 id="filterCountry"
-                placeholder="Country"
+                placeholder={t("listings.countryPlaceholder")}
                 value={filters.country}
                 onChange={(e) =>
                   setFilters({ ...filters, country: e.target.value })
@@ -427,14 +434,21 @@ export default function PurchaseListingsPage() {
               <Select
                 value={filters.category}
                 onValueChange={(value) =>
-                  setFilters({ ...filters, category: value === "all" ? "" : value })
+                  setFilters({
+                    ...filters,
+                    category: value === "all" ? "" : value,
+                  })
                 }
               >
                 <SelectTrigger id="filterCategory">
-                  <SelectValue placeholder="All" />
+                  <SelectValue
+                    placeholder={t("listings.filters.allCategories")}
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="all">
+                    {t("listings.filters.allCategories")}
+                  </SelectItem>
                   {categories.map((c) => (
                     <SelectItem key={c.id} value={c.id}>
                       {c.name}
@@ -458,10 +472,18 @@ export default function PurchaseListingsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="date">Date</SelectItem>
-                  <SelectItem value="name">Name</SelectItem>
-                  <SelectItem value="price">Price</SelectItem>
-                  <SelectItem value="category">Category</SelectItem>
+                  <SelectItem value="date">
+                    {t("listings.filters.sortByDate")}
+                  </SelectItem>
+                  <SelectItem value="name">
+                    {t("listings.filters.sortByName")}
+                  </SelectItem>
+                  <SelectItem value="price">
+                    {t("listings.filters.sortByPrice")}
+                  </SelectItem>
+                  <SelectItem value="category">
+                    {t("listings.filters.sortByCategory")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -477,13 +499,11 @@ export default function PurchaseListingsPage() {
                 })
               }
             >
-              {filters.sortOrder === "asc" ? "↑ Ascending" : "↓ Descending"}
+              {filters.sortOrder === "asc"
+                ? t("listings.ascending")
+                : t("listings.descending")}
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleResetFilters}
-            >
+            <Button variant="outline" size="sm" onClick={handleResetFilters}>
               {t("listings.filters.reset")}
             </Button>
           </div>
@@ -492,7 +512,7 @@ export default function PurchaseListingsPage() {
 
       <div className="grid gap-4">
         {isLoading ? (
-          <div className="text-center py-8">Loading...</div>
+          <div className="text-center py-8">{t("loading")}</div>
         ) : listings.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             {t("listings.purchases.empty")}
