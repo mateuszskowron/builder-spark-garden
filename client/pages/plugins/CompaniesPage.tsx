@@ -153,9 +153,7 @@ export default function CompaniesPage() {
     try {
       const updated = await toggleCompanyActive(company.id, !company.active);
       if (updated) {
-        setCompanies(
-          companies.map((c) => (c.id === updated.id ? updated : c)),
-        );
+        setCompanies(companies.map((c) => (c.id === updated.id ? updated : c)));
         toast({
           title: t("success"),
           description: updated.active
@@ -341,7 +339,9 @@ export default function CompaniesPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>{t("admin.companies.name")}</TableHead>
-                    <TableHead>{t("admin.companies.registrationNumber")}</TableHead>
+                    <TableHead>
+                      {t("admin.companies.registrationNumber")}
+                    </TableHead>
                     <TableHead>{t("admin.companies.city")}</TableHead>
                     <TableHead>{t("admin.companies.country")}</TableHead>
                     <TableHead>{t("admin.companies.status")}</TableHead>
@@ -358,7 +358,9 @@ export default function CompaniesPage() {
                       <TableCell>{company.city}</TableCell>
                       <TableCell>{company.country}</TableCell>
                       <TableCell>
-                        <Badge variant={company.active ? "default" : "secondary"}>
+                        <Badge
+                          variant={company.active ? "default" : "secondary"}
+                        >
                           {company.active
                             ? t("admin.companies.active")
                             : t("admin.companies.inactive")}
@@ -441,7 +443,9 @@ export default function CompaniesPage() {
                 <p className="text-sm font-medium text-muted-foreground">
                   {t("admin.companies.createdAt")}
                 </p>
-                <p>{new Date(selectedCompany.createdAt).toLocaleDateString()}</p>
+                <p>
+                  {new Date(selectedCompany.createdAt).toLocaleDateString()}
+                </p>
               </div>
             </div>
           )}

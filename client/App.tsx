@@ -19,6 +19,9 @@ import ChatPage from "./pages/plugins/ChatPage";
 import ContactPage from "./pages/plugins/ContactPage";
 import ListingDetailPage from "./pages/plugins/ListingDetailPage";
 import OffersPage from "./pages/plugins/OffersPage";
+import MessagesPage from "./pages/plugins/MessagesPage";
+import CasesPage from "./pages/plugins/CasesPage";
+import CalendarPage from "./pages/plugins/CalendarPage";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { AuthProvider, useAuth } from "@/state/AuthContext";
 
@@ -184,6 +187,39 @@ function AppRoutes() {
           <Protected>
             <AppLayout>
               <OffersPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/messages"
+        element={
+          <Protected>
+            <AppLayout>
+              <MessagesPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/cases"
+        element={
+          <Protected>
+            <AppLayout>
+              <CasesPage />
+            </AppLayout>
+          </Protected>
+        }
+      />
+
+      <Route
+        path="/calendar"
+        element={
+          <Protected>
+            <AppLayout>
+              <CalendarPage />
             </AppLayout>
           </Protected>
         }
