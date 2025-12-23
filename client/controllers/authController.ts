@@ -66,7 +66,9 @@ const DEMO_ACCOUNTS: { email: string; password: string; user: User }[] = [
 
 function isDemoAccount(email: string, password: string): User | null {
   const demoAccount = DEMO_ACCOUNTS.find(
-    (acc) => acc.email.toLowerCase() === email.toLowerCase() && acc.password === password
+    (acc) =>
+      acc.email.toLowerCase() === email.toLowerCase() &&
+      acc.password === password,
   );
   return demoAccount?.user || null;
 }
