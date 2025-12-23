@@ -69,8 +69,8 @@ export default function CompaniesPage() {
       setCompanies(data);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to load companies",
+        title: t("error"),
+        description: t("admin.companies.loadError"),
         variant: "destructive",
       });
     } finally {
@@ -112,8 +112,8 @@ export default function CompaniesPage() {
 
     if (!formData.name || !formData.email || !formData.registrationNumber) {
       toast({
-        title: "Validation Error",
-        description: "Please fill in all required fields",
+        title: t("admin.companies.validationError"),
+        description: t("admin.companies.fillRequired"),
         variant: "destructive",
       });
       return;
@@ -127,23 +127,23 @@ export default function CompaniesPage() {
             companies.map((c) => (c.id === updated.id ? updated : c)),
           );
           toast({
-            title: "Success",
-            description: "Company updated successfully",
+            title: t("success"),
+            description: t("admin.companies.updated"),
           });
         }
       } else {
         const newCompany = await createCompany(formData);
         setCompanies([...companies, newCompany]);
         toast({
-          title: "Success",
-          description: "Company created successfully",
+          title: t("success"),
+          description: t("admin.companies.created"),
         });
       }
       setIsDialogOpen(false);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to save company",
+        title: t("error"),
+        description: t("admin.companies.saveError"),
         variant: "destructive",
       });
     }
@@ -157,14 +157,16 @@ export default function CompaniesPage() {
           companies.map((c) => (c.id === updated.id ? updated : c)),
         );
         toast({
-          title: "Success",
-          description: `Company ${updated.active ? "activated" : "deactivated"}`,
+          title: t("success"),
+          description: updated.active
+            ? t("admin.companies.activateAction", { name: updated.name })
+            : t("admin.companies.deactivateAction", { name: updated.name }),
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to toggle company status",
+        title: t("error"),
+        description: t("admin.companies.toggleError"),
         variant: "destructive",
       });
     }
@@ -205,7 +207,7 @@ export default function CompaniesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  placeholder="Company name"
+                  placeholder={t("admin.companies.namePlaceholder")}
                   required
                 />
               </div>
@@ -222,7 +224,7 @@ export default function CompaniesPage() {
                       registrationNumber: e.target.value,
                     })
                   }
-                  placeholder="Registration number"
+                  placeholder={t("admin.companies.registrationPlaceholder")}
                   required
                 />
               </div>
@@ -235,7 +237,7 @@ export default function CompaniesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  placeholder="Email address"
+                  placeholder={t("admin.companies.emailPlaceholder")}
                   required
                 />
               </div>
@@ -247,7 +249,7 @@ export default function CompaniesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, phone: e.target.value })
                   }
-                  placeholder="Phone number"
+                  placeholder={t("admin.companies.phonePlaceholder")}
                 />
               </div>
               <div>
@@ -258,7 +260,7 @@ export default function CompaniesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, address: e.target.value })
                   }
-                  placeholder="Street address"
+                  placeholder={t("admin.companies.addressPlaceholder")}
                   required
                 />
               </div>
@@ -271,7 +273,7 @@ export default function CompaniesPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, city: e.target.value })
                     }
-                    placeholder="City"
+                    placeholder={t("admin.companies.cityPlaceholder")}
                     required
                   />
                 </div>
@@ -288,7 +290,7 @@ export default function CompaniesPage() {
                         postalCode: e.target.value,
                       })
                     }
-                    placeholder="Postal code"
+                    placeholder={t("admin.companies.postalCodePlaceholder")}
                     required
                   />
                 </div>
@@ -301,7 +303,7 @@ export default function CompaniesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, country: e.target.value })
                   }
-                  placeholder="Country"
+                  placeholder={t("admin.companies.countryPlaceholder")}
                   required
                 />
               </div>
@@ -328,7 +330,7 @@ export default function CompaniesPage() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <div className="text-center py-8">Loading...</div>
+            <div className="text-center py-8">{t("loading")}</div>
           ) : companies.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               {t("admin.companies.empty")}

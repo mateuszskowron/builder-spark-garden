@@ -62,6 +62,9 @@ const resources = {
         polish: "Polish",
         english: "English",
         toggleSidebar: "Toggle Sidebar",
+        cases: "Cases",
+        calendar: "Calendar",
+        messages: "Messages",
       },
       dashboard: {
         welcome: "Welcome, {{name}}",
@@ -210,7 +213,8 @@ const resources = {
         restore: "Restore",
         contact: "Contact Seller",
         contactSeller: "Contact Seller",
-        contactSellerDescription: "Send a message to the seller about this listing",
+        contactSellerDescription:
+          "Send a message to the seller about this listing",
         seller: "Seller Information",
         product: "Product",
         company: "Company",
@@ -393,7 +397,7 @@ const resources = {
           title: "User Management",
           description: "Manage company users and their roles",
           add: "Add User",
-          edit: "Edit User",
+          editTitle: "Edit User",
           listTitle: "All Users",
           empty: "No users found",
           name: "Full Name",
@@ -443,8 +447,8 @@ const resources = {
           listTitle: "Registration Requests",
           empty: "No registration requests found",
           pending: "Pending",
-          approved: "Approved",
-          rejected: "Rejected",
+          statusApproved: "Approved",
+          statusRejected: "Rejected",
           status: "Status",
           all: "All",
           companyName: "Company Name",
@@ -557,6 +561,9 @@ const resources = {
         polish: "Polski",
         english: "Angielski",
         toggleSidebar: "Przełącz Pasek Boczny",
+        cases: "Sprawy",
+        calendar: "Kalendarz",
+        messages: "Wiadomości",
       },
       dashboard: {
         welcome: "Witaj, {{name}}",
@@ -705,7 +712,8 @@ const resources = {
         restore: "Przywróć",
         contact: "Skontaktuj się ze Sprzedawcą",
         contactSeller: "Skontaktuj się ze Sprzedawcą",
-        contactSellerDescription: "Wyślij wiadomość do sprzedawcy w sprawie tego ogłoszenia",
+        contactSellerDescription:
+          "Wyślij wiadomość do sprzedawcy w sprawie tego ogłoszenia",
         seller: "Informacje o Sprzedawcy",
         product: "Produkt",
         company: "Firma",
@@ -777,7 +785,8 @@ const resources = {
       },
       offers: {
         title: "Moje Oferty",
-        description: "Przeglądaj i zarządzaj wszystkimi wysłanymi i otrzymanymi ofertami",
+        description:
+          "Przeglądaj i zarządzaj wszystkimi wysłanymi i otrzymanymi ofertami",
         empty: "Nie znaleziono ofert",
         loadError: "Nie udało się załadować ofert",
         yourOffer: "Twoja Oferta",
@@ -835,7 +844,7 @@ const resources = {
         aboutText1:
           "Giełda Spożywcza to nowoczesna platforma przeznaczona do łączenia producentów żywności, przetwórców i sprzedawców detalicznych na jednym zunifikowanym rynku.",
         aboutText2:
-          "Naszą misją jest uproszczenie handlu rolnego, zmniejszenie marnowania żywności i stworzenie oportunistycznych dla uczciwych cen i praktyk zrównoważonych w łańcuchu dostaw żywności.",
+          "Naszą misją jest uproszczenie handlu rolnego, zmniejszenie marnowania żywności i tworzenie możliwości dla uczciwych cen oraz zrównoważonych praktyk w łańcuchu dostaw żywności.",
         aboutText3:
           "Dzięki naszym kompleksowym narzędziom do zarządzania ogłoszeniami, komunikacji i śledzenia transakcji, ułatwiamy efektywne i bezpieczne prowadzenie interesów.",
       },
@@ -888,7 +897,7 @@ const resources = {
           title: "Zarządzanie Użytkownikami",
           description: "Zarządzaj użytkownikami firm i ich rolami",
           add: "Dodaj Użytkownika",
-          edit: "Edytuj Użytkownika",
+          editTitle: "Edytuj Użytkownika",
           listTitle: "Wszyscy Użytkownicy",
           empty: "Brak użytkowników",
           name: "Pełne Imię i Nazwisko",
@@ -934,12 +943,12 @@ const resources = {
         },
         registration: {
           title: "Wnioski Rejestracyjne",
-          description: "Przejrzyj i zarządzaj wniami rejestracyjnymi firm",
+          description: "Przejrzyj i zarządzaj wnioskami rejestracyjnymi firm",
           listTitle: "Wnioski Rejestracyjne",
           empty: "Brak wniosków rejestracyjnych",
           pending: "Oczekujące",
-          approved: "Zatwierdzone",
-          rejected: "Odrzucone",
+          statusApproved: "Zatwierdzone",
+          statusRejected: "Odrzucone",
           status: "Status",
           all: "Wszystkie",
           companyName: "Nazwa Firmy",

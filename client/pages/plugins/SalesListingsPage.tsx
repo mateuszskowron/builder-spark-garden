@@ -88,8 +88,8 @@ export default function SalesListingsPage() {
       setListings(listingsData);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to load data",
+        title: t("error"),
+        description: t("listings.loadError"),
         variant: "destructive",
       });
     } finally {
@@ -104,8 +104,8 @@ export default function SalesListingsPage() {
       setListings(data);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to load listings",
+        title: t("error"),
+        description: t("listings.loadError"),
         variant: "destructive",
       });
     } finally {
@@ -125,8 +125,8 @@ export default function SalesListingsPage() {
       !formData.country
     ) {
       toast({
-        title: "Validation Error",
-        description: "Please fill in all required fields",
+        title: t("validation.error"),
+        description: t("admin.companies.fillRequired"),
         variant: "destructive",
       });
       return;
@@ -134,8 +134,8 @@ export default function SalesListingsPage() {
 
     if (!user?.companyId) {
       toast({
-        title: "Error",
-        description: "You must be associated with a company",
+        title: t("error"),
+        description: t("listings.companyRequired"),
         variant: "destructive",
       });
       return;
@@ -174,13 +174,13 @@ export default function SalesListingsPage() {
       });
 
       toast({
-        title: "Success",
-        description: "Sales listing created and awaiting approval",
+        title: t("success"),
+        description: t("listings.created"),
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to create listing",
+        title: t("error"),
+        description: t("listings.createError"),
         variant: "destructive",
       });
     }
@@ -233,7 +233,7 @@ export default function SalesListingsPage() {
                       productName: e.target.value,
                     })
                   }
-                  placeholder="e.g., Tomatoes"
+                  placeholder={t("listings.productNamePlaceholder")}
                   required
                 />
               </div>
@@ -246,7 +246,7 @@ export default function SalesListingsPage() {
                   }
                 >
                   <SelectTrigger id="category">
-                    <SelectValue placeholder="Select category" />
+                    <SelectValue placeholder={t("listings.selectCategory")} />
                   </SelectTrigger>
                   <SelectContent>
                     {categories.map((c) => (
@@ -270,7 +270,7 @@ export default function SalesListingsPage() {
                       description: e.target.value,
                     })
                   }
-                  placeholder="Product description"
+                  placeholder={t("listings.descriptionPlaceholder")}
                   className="w-full px-3 py-2 border rounded-md min-h-24"
                 />
               </div>
@@ -288,7 +288,7 @@ export default function SalesListingsPage() {
                         price: e.target.value,
                       })
                     }
-                    placeholder="Price"
+                    placeholder={t("listings.price")}
                     required
                   />
                 </div>
@@ -303,7 +303,7 @@ export default function SalesListingsPage() {
                         unit: e.target.value,
                       })
                     }
-                    placeholder="e.g., kg, l, pcs"
+                    placeholder={t("listings.unitPlaceholder")}
                     required
                   />
                 </div>
@@ -321,7 +321,7 @@ export default function SalesListingsPage() {
                       quantity: e.target.value,
                     })
                   }
-                  placeholder="Available quantity"
+                  placeholder={t("listings.quantityPlaceholder")}
                 />
               </div>
               <div>
@@ -335,7 +335,7 @@ export default function SalesListingsPage() {
                       location: e.target.value,
                     })
                   }
-                  placeholder="Street address"
+                  placeholder={t("listings.addressPlaceholder")}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -350,7 +350,7 @@ export default function SalesListingsPage() {
                         city: e.target.value,
                       })
                     }
-                    placeholder="City"
+                    placeholder={t("listings.cityPlaceholder")}
                     required
                   />
                 </div>
@@ -365,7 +365,7 @@ export default function SalesListingsPage() {
                         country: e.target.value,
                       })
                     }
-                    placeholder="Country"
+                    placeholder={t("listings.countryPlaceholder")}
                     required
                   />
                 </div>
@@ -396,7 +396,7 @@ export default function SalesListingsPage() {
             <Label htmlFor="search">{t("listings.filters.search")}</Label>
             <Input
               id="search"
-              placeholder="Search by product name..."
+              placeholder={t("listings.filters.searchPlaceholder")}
               value={filters.searchText}
               onChange={(e) =>
                 setFilters({ ...filters, searchText: e.target.value })
@@ -408,7 +408,7 @@ export default function SalesListingsPage() {
               <Label htmlFor="filterCity">{t("listings.filters.city")}</Label>
               <Input
                 id="filterCity"
-                placeholder="City"
+                placeholder={t("listings.cityPlaceholder")}
                 value={filters.city}
                 onChange={(e) =>
                   setFilters({ ...filters, city: e.target.value })
@@ -421,7 +421,7 @@ export default function SalesListingsPage() {
               </Label>
               <Input
                 id="filterCountry"
-                placeholder="Country"
+                placeholder={t("listings.countryPlaceholder")}
                 value={filters.country}
                 onChange={(e) =>
                   setFilters({ ...filters, country: e.target.value })
@@ -439,10 +439,10 @@ export default function SalesListingsPage() {
                 }
               >
                 <SelectTrigger id="filterCategory">
-                  <SelectValue placeholder="All" />
+                  <SelectValue placeholder={t("listings.filters.allCategories")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="all">{t("listings.filters.allCategories")}</SelectItem>
                   {categories.map((c) => (
                     <SelectItem key={c.id} value={c.id}>
                       {c.name}
@@ -466,10 +466,10 @@ export default function SalesListingsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="date">Date</SelectItem>
-                  <SelectItem value="name">Name</SelectItem>
-                  <SelectItem value="price">Price</SelectItem>
-                  <SelectItem value="category">Category</SelectItem>
+                  <SelectItem value="date">{t("listings.filters.sortByDate")}</SelectItem>
+                  <SelectItem value="name">{t("listings.filters.sortByName")}</SelectItem>
+                  <SelectItem value="price">{t("listings.filters.sortByPrice")}</SelectItem>
+                  <SelectItem value="category">{t("listings.filters.sortByCategory")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -485,7 +485,7 @@ export default function SalesListingsPage() {
                 })
               }
             >
-              {filters.sortOrder === "asc" ? "↑ Ascending" : "↓ Descending"}
+              {filters.sortOrder === "asc" ? t("listings.ascending") : t("listings.descending")}
             </Button>
             <Button
               variant="outline"
@@ -500,7 +500,7 @@ export default function SalesListingsPage() {
 
       <div className="grid gap-4">
         {isLoading ? (
-          <div className="text-center py-8">Loading...</div>
+          <div className="text-center py-8">{t("loading")}</div>
         ) : listings.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             {t("listings.sales.empty")}
